@@ -1,0 +1,30 @@
+#fundo{
+    background-color: #192a6b;
+}
+#botaodelogin{
+    top: 100px;
+    width: 90px;
+    background-color: green;
+    color: white;
+}
+#usuario{
+    display: flex;
+    gap: 1000px;
+    width: 200px;
+    
+}
+#senha{
+    padding-left: 1000px;
+    width: 200px;
+}
+#titulo{
+    color: white;
+    padding-top: 100px;
+    padding-left: 1000px;
+}
+#fundologin{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    scale: 1.34;
+}
