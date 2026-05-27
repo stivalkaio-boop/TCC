@@ -10,13 +10,13 @@
 
 <body id="fundo">
 
-    <!-- IMAGEM DE FUNDO -->
+    <!--imagem do fundo-->
     <img id="fundologin" src="static/NEYMAR1.jpeg" alt="Neymar SENAI">
 
-    <!-- LOGO -->
-    <img id="logo" src="static/logo.png" alt="Logo">
+    <!--logo-->
+    <img id="logo" src="static/logo1.jpeg" alt="Logo">
 
-    <!-- FORMULÁRIO -->
+    <!--formulario-->
     <div class="formulario-login">
 
         <div class="campo">
