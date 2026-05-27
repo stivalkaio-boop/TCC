@@ -7,7 +7,7 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* IMAGEM DO NEYMAR */
+
 #fundologin{
     position: fixed;
     width: 60%;
@@ -17,11 +17,10 @@
     scale: 1.0;
 }
 
-/* LOGO */
 #logo{
     position: absolute;
     width: 180px;
-    top: 100px;
+    top: 160px;
     left: 1160px;
 }
 
@@ -29,22 +28,14 @@
     position: absolute;
     top: 50%;
     right: 8%;
-
     transform: translateY(-50%);
-
     background: rgba(25, 42, 107, 0.9);
-
     padding: 40px;
-
     border-radius: 20px;
-
     display: flex;
     flex-direction: column;
-
     gap: 20px;
-
     width: 320px;
-
     backdrop-filter: blur(8px);
 }
 
@@ -53,31 +44,23 @@
     text-align: center;
 }
 
-/* CAMPOS */
+
 .campo input{
     width: 100%;
     padding: 12px;
-
     border: none;
     border-radius: 10px;
-
     outline: none;
-
     font-size: 15px;
 }
 
-/* BOTÃO */
 #botaodelogin{
     background-color: #ff9500;
     color: white;
-
     padding: 12px;
-
     border: none;
     border-radius: 10px;
-
     font-weight: bold;
-
     transition: 0.3s;
 }
 
