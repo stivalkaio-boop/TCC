@@ -1,0 +1,230 @@
+#fundo{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #192a6b;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#fundologin{
+    position: fixed;
+    width: 60%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    scale: 1.0;
+}
+
+#logo{
+    position: absolute;
+    width: 180px;
+    top: 200px;
+    left: 1510px;
+}
+
+.formulario-login{
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    background: rgba(25, 42, 107, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 320px;
+    backdrop-filter: blur(8px);
+}
+
+.formulario-login h1{
+    color: white;
+    text-align: center;
+}
+
+
+.campo input{
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+}
+
+#botaodelogin{
+    background-color: #ff9500;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#botaodelogin:hover{
+    background-color: #e68600;
+}
+
+#navbar{
+    font-size: 20px;
+    top: 0px;
+    position: fixed;
+    background-color: #192a6b;
+    color: white;
+    padding: 20px;
+}
+
+
+.navbar .navbar-brand {
+    color: #ffffff !important;
+}
+
+
+.navbar .nav-link {
+    color: #ffffff !important;
+}
+
+
+.navbar .nav-link:hover {
+    color: #ff9500 !important;
+}
+
+
+.navbar .navbar-toggler-icon {
+    filter: invert(1); 
+}
+
+#fundologin1{
+    background-position: center;
+    position: fixed;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 110%;
+    background: url('fundologin1.jpeg') center/cover no-repeat;
+    filter: blur(4px);
+    z-index: -1;
+}
+
+#parafuso {
+    position: absolute;
+    left: 1290px;
+    top: 270px;
+    width: 30px;      /* Define uma largura fixa pequena */
+    height: 30px;     /* Define uma altura fixa pequena */
+    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
+}
+
+.modal-zoom {
+    display: none; /* Esconde o bloco */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-zoom:target {
+    display: flex;
+  }
+
+  .fechar-zoom {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 50px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  #botaovoltar{
+    position: absolute;
+    top: 915px;
+  }
+
+  #Martelo {
+    position: absolute;
+    top: 315px;
+    left: 1290px;
+    width: 30px;      /* Define uma largura fixa pequena */
+    height: 30px;     /* Define uma altura fixa pequena */
+    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
+}
+
+#Chave {
+    position: absolute;
+    top: 360px;
+    left: 1290px;
+    width: 30px;     
+    height: 30px;     
+    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
+}
+
+#caixa-tabela {
+    display: flex;
+    justify-content: center;   /* Centraliza horizontalmente */
+    align-items: center;       /* Centraliza verticalmente */
+    min-height: 75vh;          /* Dá uma altura boa para a tela */
+    padding: 20px;
+    width: 100%;
+}
+
+#table {
+    width: 100% !important;    /* Preenche o limite que vamos dar abaixo */
+    max-width: 800px !important; /* ISSO impede a tabela de esticar até as bordas da tela */
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background-color: white;   /* Garante o fundo branco atrás das linhas */
+}
+
+#table th {
+    background-color: #192a6b;
+    color: white;
+    padding: 12px;
+}
+
+#table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+#alicate {
+    position: absolute;
+    top: 415px;
+    left: 1290px;
+    width: 30px;     
+    height: 30px;     
+    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
+}
+
+#jaleco {
+    position: absolute;
+    top: 460px;
+    left: 1290px;
+    width: 30px;     
+    height: 30px;     
+    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
+}
+
+/* 1. Cria o efeito: a página começa invisível (opacity: 0) e aparece suavemente */
+@keyframes fadeEntrada {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 2. Aplica esse efeito diretamente na tag body de todas as páginas */
+body {
+    animation: fadeEntrada 0.5s ease-in-out forwards;
+}
