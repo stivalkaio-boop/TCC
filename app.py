@@ -31,7 +31,12 @@ def Itens():
 def adicionar():
     return render_template('adicionar.html') 
 
-# 5. Página de Conexão (Movida para o lugar correto)
+# 5. Pagina de adicionar
+@app.route('/retirar')
+def retirar():
+    return render_template('retirar.html') 
+
+# 6. Página de Conexão (Movida para o lugar correto)
 @app.route('/conexao')
 def conexao():
     try:
