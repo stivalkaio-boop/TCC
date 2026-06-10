@@ -26,7 +26,12 @@ def painel():
 def Itens():
     return render_template('Itens.html') 
 
-# 4. Página de Conexão (Movida para o lugar correto)
+# 4. Pagina de adicionar
+@app.route('/adicionar')
+def adicionar():
+    return render_template('adicionar.html') 
+
+# 5. Página de Conexão (Movida para o lugar correto)
 @app.route('/conexao')
 def conexao():
     try:
