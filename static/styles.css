@@ -214,6 +214,42 @@
     object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
 }
 
+#fundoadicionar{
+    background-color: #192a6b;
+}
+
+#adicionar {
+    background-color: #ddd;
+    color: black;
+    position: absolute;
+    top: 600px;
+    width: 150px;
+    height: 80px;  
+    left: 850px;
+    border-radius: 6px;
+}
+
+.QUADRO {
+    position: absolute;
+    border-radius: 12px;
+    top: 100px;
+    left: 730px;
+    width: 20%;
+    height: 50%;
+    background-color: #ff9500;
+    z-index: 1000;
+}
+
+.quadro-branco form {
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.quadro-branco input[type="text"],
+.quadro-branco input[type="number"] { 
+    width: 350px;
+}
 /* 1. Cria o efeito: a página começa invisível (opacity: 0) e aparece suavemente */
 @keyframes fadeEntrada {
     from {

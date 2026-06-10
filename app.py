@@ -31,7 +31,7 @@ def Itens():
 def adicionar():
     return render_template('adicionar.html') 
 
-# 5. Pagina de adicionar
+# 5. Pagina de retirar
 @app.route('/retirar')
 def retirar():
     return render_template('retirar.html') 
