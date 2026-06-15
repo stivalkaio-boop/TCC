@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itens</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="icon" type="image/icon" href="static/logosenai.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+  <img id="fundologin1" src="static/fundologin1.jpeg" alt="Senai">
+    <div id="caixa-tabela">
+        <table id="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Função</th>
+            <th scope="col">Estoque</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Imagem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Parafuso</td>
+            <td>para furar as coisas</td>
+            <td>100</td>
+            <td>R$1,50</td>
+            <td>
+                <a href="#zoom-parafuso">
+                <img id="parafuso" src="static/parafuso.jpg" alt="Foto do Produto">
+                </a>
+                <div id="zoom-parafuso" class="modal-zoom">
+                    <a href="#" class="fechar-zoom">&times;</a>
+                <img src="static/parafuso.jpg" alt="Parafuso Ampliada" class="img-ampliada">
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Martelo</td>
+            <td>Bater nas coisas</td>
+            <td>50</td>
+            <td>R$30,00</td>
+            <td>
+            <a href="#zoom-Martelo">
+                <img id="Martelo" src="static/Martelo.jpg" alt="Foto do Produto">
+            </a>
+            <div id="zoom-Martelo" class="modal-zoom">
+                <a href="#" class="fechar-zoom">&times;</a>
+            <img src="static/Martelo.jpg" alt="Parafuso Ampliada" class="img-ampliada">
+        </div>
+            </td>
+            </tr>
+            <tr>
+            <th scope="row">3</th>
+            <td>Chave de fenda</td>
+            <td>Apertar e afrouxar novos parafusos</td>
+            <td>75</td>
+            <td>R$10,00</td>
+            <td>
+            <a href="#zoom-Chave">
+                <img id="Chave" src="static/Chave.webp" alt="Foto do Produto">
+                </a>
+                <div id="zoom-Chave" class="modal-zoom">
+                <a href="#" class="fechar-zoom">&times;</a>
+                <img src="static/Chave.webp" alt="Chave de fenda Ampliada" class="img-ampliada">
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td>Alicate</td>
+            <td>Apertar e cortar</td>
+            <td>25</td>
+            <td>R$170,00</td>
+            <td>
+            <a href="#zoom-alicate">
+                <img id="alicate" src="static/alicate.webp" alt="Foto do Produto">
+                </a>
+                <div id="zoom-alicate" class="modal-zoom">
+                <a href="#" class="fechar-zoom">&times;</a>
+                <img src="static/alicate.webp" alt="Alicate Ampliada" class="img-ampliada">
+              </div>
+            </td>
+          </tr> <tr>
+            <th scope="row">5</th>
+            <td>Jaleco</td>
+            <td>Uniforme para aula prática</td>
+            <td>20</td>
+            <td>R$50,00</td>
+            <td>
+            <a href="#zoom-Jaleco">
+              <img id="jaleco" src="static/jaleco.jpg" alt="Foto do Produto">
+              </a>
+              <div id="zoom-Jaleco" class="modal-zoom">
+              <a href="#" class="fechar-zoom">&times;</a>
+              <img src="static/jaleco.jpg" alt="Jaleco Ampliado" class="img-ampliada">
+              </div>
+            </td>
+          </tr>
+      </table>
+    </div>
+      <a id="botaovoltar" href="{{ url_for('painel') }}" class="btn btn-primary">
+      &larr; Voltar para a tela de Inicio
+      </a>
+    </body>
+</html>
