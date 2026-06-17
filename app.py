@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for    
 
 app = Flask(__name__)
 
@@ -42,14 +42,14 @@ def conexao():
     try:
         # Tenta conectar ao banco
         conexao_bd = mysql.connector.connect(
-            host='127.0.0.1', # Geralmente usa-se localhost ou 127.0.0.1 para o banco local
+            host='localhost', # Geralmente usa-se localhost ou 127.0.0.1 para o banco local
             user='root',      # O parâmetro correto é 'user', não 'username'
             password='',
             port=3306,
             database='conexao'
         )
         
-        # Se chegou até aqui, funcionou! Vamos fechar a conexão.
+
         conexao_bd.close()
         return "Conexão com o banco de dados realizada com sucesso!"
         

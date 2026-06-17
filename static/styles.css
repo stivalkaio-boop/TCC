@@ -185,6 +185,7 @@
 }
 
 #table th {
+    text-align: center;
     background-color: #192a6b;
     color: white;
     padding: 12px;

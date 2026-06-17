@@ -17,4 +17,20 @@ VALUES
 
 SELECT * FROM itens;
 
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(255),
+    senha VARCHAR(255),
+    tipo ENUM ('admin', 'comum') DEFAULT 'comum' 
+);
+
+INSERT INTO usuarios (usuario, senha, tipo)
+VALUES
+('Kaio', 'Malu', 'comum');
+
+INSERT INTO usuarios (usuario, senha, tipo)
+VALUES
+('admin', '1234', 'admin');
+
+SELECT * FROM usuarios;
 
