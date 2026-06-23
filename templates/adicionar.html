@@ -7,25 +7,26 @@
     <link rel="stylesheet" href="static/styles.css">
 </head>
 <body id="fundoadicionar">
-    <button id="adicionar" type="button" class="btn btn-primary"> Adicionar novo item</button>
+    
     
 <div class="QUADRO" id="quadro">
     <div class="quadro-branco">
-        <h3>Adicionar novo Item</h3>            
+        <h3>Novo Item</h3>            
         
-        <form action="/salvar" method="POST" enctype="multipart/form-data">
+    <form action="/adicionar" method="POST">
             <label for="nome">Nome do item:</label>
             <input type="text" name="nome" placeholder="Nome do item">
-            <label for="nome">Função:</label>
-            <input type="text" name="funcao" placeholder="Função do item">
+            <label for="nome">Categoria:</label>
+            <input type="text" name="categoria" placeholder="Categoria do item">
             <label for="nome">Quantidade:</label>
             <input type="number" name="quantidade" placeholder="Quantidade">
             <label for="nome">Preço do item:</label>
             <input type="text" name="preco" placeholder="Preço">
-             <label for="imagem">Imagem do seu Item:</label>
-            <input type="file" id="imagem" name="imagem" accept="image/*">
-
+             <label for="foto">foto do seu Item:</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
+            <button id="adicionar" type="submit" class="btn btn-primary"> Adicionar novo item</button>
     </form>
+
     <script>
         function mostrarQuadro() {
             document.getElementById('QUADRO').style.display = 'flex';

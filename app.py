@@ -1,6 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for    
+from flask import Flask, render_template, request, redirect, url_for 
+import mysql.connector
 
 app = Flask(__name__)
+
+def obter_conexao():
+    return mysql.connector.connect(
+        host='localhost', 
+        user='root',      
+        password='root',
+        port=3306,
+        database='almoxarifado'
+    )
+
 
 # 1. Página de login
 @app.route('/', methods=['GET', 'POST'])
@@ -24,12 +35,41 @@ def painel():
 # 3. Página de Itens
 @app.route('/Itens')
 def Itens():
-    return render_template('Itens.html') 
+
+    conexao_bd = obter_conexao()
+    cursor = conexao_bd.cursor()
+    cursor.execute("SELECT * FROM itens;")
+    resultado = cursor.fetchall()
+
+    return render_template('Itens.html', resultado = resultado) 
 
 # 4. Pagina de adicionar
-@app.route('/adicionar')
+@app.route('/adicionar', methods=['GET', 'POST'])
 def adicionar():
-    return render_template('adicionar.html') 
+
+    if request.method == 'POST':
+        # Aqui dentro vai o código que pega os dados e salva no banco...
+        nome = request.form.get('nome')
+        categoria = request.form.get('categoria')
+        quantidade = request.form.get('quantidade')
+        preco = request.form.get('preco')
+        foto = request.form.get('foto')
+
+        try:
+            conexao_bd = obter_conexao()
+            cursor = conexao_bd.cursor()
+
+            comando = "INSERT INTO itens (nome, categoria, quantidade_estoque, preco_unitario, foto) VALUES (%s, %s, %s, %s, %s)"
+            valores = (nome, categoria, quantidade, preco, foto)
+            cursor.execute(comando, valores)
+            conexao_bd.commit()
+
+            return redirect(url_for('Itens'))
+
+        except mysql.connector.Error as erro:
+            return f"Erro ao salvar o item: {erro}"
+    
+    return render_template('adicionar.html')
 
 # 5. Pagina de retirar
 @app.route('/retirar')
@@ -40,21 +80,10 @@ def retirar():
 @app.route('/conexao')
 def conexao():
     try:
-        # Tenta conectar ao banco
-        conexao_bd = mysql.connector.connect(
-            host='localhost', # Geralmente usa-se localhost ou 127.0.0.1 para o banco local
-            user='root',      # O parâmetro correto é 'user', não 'username'
-            password='',
-            port=3306,
-            database='conexao'
-        )
-        
-
+        conexao_bd = obter_conexao()
         conexao_bd.close()
-        return "Conexão com o banco de dados realizada com sucesso!"
-        
+        return "Conexão com o banco de dados [almoxarifado] realizada com sucesso!"
     except mysql.connector.Error as erro:
-        # Se der erro no banco, ele te mostra o motivo na tela
         return f"Erro ao conectar ao banco de dados: {erro}"
 
 if __name__ == '__main__':

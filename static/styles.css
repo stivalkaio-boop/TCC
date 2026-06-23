@@ -74,6 +74,7 @@
     background-color: #192a6b;
     color: white;
     padding: 20px;
+    z-index: 1000;
 }
 
 
@@ -146,7 +147,8 @@
 
   #botaovoltar{
     position: absolute;
-    top: 915px;
+    left: 10px;
+    top: 900px;
   }
 
   #Martelo {
@@ -223,10 +225,10 @@
     background-color: #ff9500;
     color: black;
     position: absolute;
-    top: 600px;
+    top: 500px;
     width: 150px;
     height: 80px;  
-    left: 950px;
+    left: 120px;
     border-radius: 6px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -245,6 +247,7 @@
 }
 
 .quadro-branco form {
+    position: fixed;
     padding: 10px;
     gap: 15px;
     display: flex;
@@ -256,7 +259,7 @@
     width: 350px;
 }
 
-/* 1. Cria o efeito: a página começa invisível (opacity: 0) e aparece suavemente */
+/* 1. Cria o efeito: a página começa invisível e aparece suavemente */
 @keyframes fadeEntrada {
     from {
         opacity: 0;
