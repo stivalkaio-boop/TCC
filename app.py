@@ -55,6 +55,8 @@ def adicionar():
         preco = request.form.get('preco')
         foto = request.form.get('foto')
 
+        foto = 'static/' + foto
+
         try:
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor()

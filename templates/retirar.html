@@ -4,28 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retirar</title>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
     <body id="fundoretirar">
-    <button id="retirar" type="button" class="btn btn-primary"> Retirar item </button>
-    
-<div class="quadro_retirar" id="quadro">
-    <div class="quadro-retirar">
-        <h3>Retire seu Item!</h3>            
-        
-        <form action="/salvar" method="POST" enctype="multipart/form-data">
+    <select id="retire">
+        <option selected>Entrada</option>
+        <option value="1">Saída</option>
+    </select>
+
+    <form id="Quadro" method="POST">
             <label for="nome">Nome do item:</label>
             <input type="text" name="nome" placeholder="Nome do item">
-            <label for="nome">Função:</label>
-            <input type="text" name="funcao" placeholder="Função do item">
+            <label for="nome">Categoria:</label>
+            <input type="text" name="categoria" placeholder="Categoria do item">
             <label for="nome">Quantidade:</label>
             <input type="number" name="quantidade" placeholder="Quantidade">
             <label for="nome">Preço do item:</label>
             <input type="text" name="preco" placeholder="Preço">
-             <label for="imagem">Imagem do seu Item:</label>
-            <input type="file" id="imagem" name="imagem" accept="image/*">
-
+            <button id="retirar" type="submit" class="btn btn-primary"> Retire seu item</button>
     </form>
+    
     <script>
         function mostrarQuadro() {
             document.getElementById('QUADRO').style.display = 'flex';
@@ -34,5 +33,9 @@
             document.getElementById('QUADRO').style.display = 'none';
         }
     </script>
+
+    <a id="botaovoltar" href="{{ url_for('painel') }}" class="btn btn-primary">
+    &larr; Voltar para a tela de Inicio
+    </a>
 </body>
 </html>
