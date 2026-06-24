@@ -314,6 +314,17 @@
 }
 
 
+#fundousuario{
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 50%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+}
+
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */
 @keyframes fadeEntrada {
     from {

@@ -54,7 +54,6 @@ def adicionar():
         quantidade = request.form.get('quantidade')
         preco = request.form.get('preco')
         foto = request.form.get('foto')
-
         foto = 'static/' + foto
 
         try:
@@ -78,7 +77,12 @@ def adicionar():
 def retirar():
     return render_template('retirar.html') 
 
-# 6. Página de Conexão (Movida para o lugar correto)
+# 6. Pagina de Usuario
+@app.route('/usuarios')
+def usuarios():
+    return render_template('usuarios.html') 
+
+# 7. Página de Conexão (Movida para o lugar correto)
 @app.route('/conexao')
 def conexao():
     try:
