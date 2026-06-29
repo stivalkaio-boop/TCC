@@ -145,31 +145,13 @@
     font-weight: bold;
   }
 
-  #botaovoltar{
+    #botao_inicio{
     position: absolute;
     left: 10px;
-    top: 900px;
+    top: 850px;
   }
 
-  #Martelo {
-    position: absolute;
-    top: 315px;
-    left: 1290px;
-    width: 30px;      /* Define uma largura fixa pequena */
-    height: 30px;     /* Define uma altura fixa pequena */
-    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
-}
-
-#Chave {
-    position: absolute;
-    top: 360px;
-    left: 1290px;
-    width: 30px;     
-    height: 30px;     
-    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
-}
-
-#caixa-tabela {
+    #caixa-tabela {
     display: flex;
     justify-content: center;   /* Centraliza horizontalmente */
     align-items: center;       /* Centraliza verticalmente */
@@ -197,24 +179,6 @@
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-}
-
-#alicate {
-    position: absolute;
-    top: 415px;
-    left: 1290px;
-    width: 30px;     
-    height: 30px;     
-    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
-}
-
-#jaleco {
-    position: absolute;
-    top: 460px;
-    left: 1290px;
-    width: 30px;     
-    height: 30px;     
-    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
 }
 
 #fundoadicionar{
@@ -300,23 +264,25 @@
 }
 
 #botaovoltar{
-    position: absolute;
+    position: fixed;
     text-align: center;
     text-decoration: none;
     justify-content: center;
+    bottom: 10px;
     padding-top: 20px;
     height: 40px;
     width: 230px;
+    top: 850px;
     left: 10px;
-    top: 880px;
     background-color: #ff9500;
     color: #ddd;
+    text-decoration: none;
 }
 
 
 #fundousuario{
 
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 50%;
@@ -324,6 +290,72 @@
     object-fit: cover;
     z-index: -1;
 }
+
+#nome_do_usuario{
+
+    position: absolute;
+    top: 400px;
+    left: 1350px;
+    width: 200px;
+    padding: 12px;
+    border-radius: 8px;
+    height: 50px;
+}
+
+#senha_do_usuario{
+
+    position: absolute;
+    top: 500px;
+    left: 1350px;
+    width: 200px;
+    height: 50px;
+    padding: 12px;
+    border-radius: 8px;
+    border-color: black;
+    border: 2px solid black;
+
+}
+
+#cadastro{
+    position: absolute;
+    top: 600px;
+    left: 1360px;
+    width: 200px;
+    height: 60px;
+    border: none;
+    background-color: #ff9500;
+    transition: background-color 0.3s ease;
+}
+
+#cadastro:hover {
+    background-color: #e08300; /* Um tom de laranja mais escuro para o efeito */
+}
+
+#texto_usuario{
+
+    position: absolute;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    top: 180px;
+    left: 1290px;
+
+}
+
+#botao_voltar{
+    position: fixed;
+    left: 970px;
+    bottom: 10px;
+    height: 50px;
+    width: 200px;
+    padding: 8px;
+    color: #ffffff;
+    background-color: #192a6b;
+    text-decoration: none;
+    display: flex;            /* Ativa o modo Flexbox */
+    justify-content: center;  /* Centraliza o texto na horizontal (esquerda/direita) */
+    align-items: center;
+}    
 
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */
 @keyframes fadeEntrada {

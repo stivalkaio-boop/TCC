@@ -9,6 +9,27 @@
 </head>
 <body>
     <img src="static/Lamine.jpeg" id="fundousuario">
+
+    <h1 id="texto_usuario">Cadastrar Novo Usuario</h1>
+
+    <form id="usuarioform" action="/usuarios" method= "POST">
+        <div class="campoo">
+            <input id="nome_do_usuario" name="nome_usuario" type="text" placeholder="Nome do Usuario" required>
+        </div>
+
+        <div class="campo">
+            <input id="senha_do_usuario" name="senha_usuario" type="password" placeholder="Senha do usuario" required>
+        </div>
+
+        <button id="cadastro" type="submit" class="btn">
+            Cadastrar
+        </button>
+
+    </form>
+
+    <a id="botao_voltar" href="{{ url_for('painel') }}" class="btn btn-primary">
+    &larr; Voltar para a tela de Inicio
+    </a>
     
 </body>
 </html>

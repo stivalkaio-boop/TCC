@@ -78,8 +78,25 @@ def retirar():
     return render_template('retirar.html') 
 
 # 6. Pagina de Usuario
-@app.route('/usuarios')
+@app.route('/usuarios', methods=['GET', 'POST'])
 def usuarios():
+
+    if request.method == 'POST':
+        nome = request.form.get('nome_usuario')
+        senha = request.form.get('senha_usuario')
+
+        try:
+            conexao_bd = obter_conexao()
+            cursor = conexao_bd.cursor()
+
+            comando = "INSERT INTO usuarios (nome, senha) VALUES (%s, %s)"
+            valores = (nome, senha)
+            cursor.execute(comando, valores)
+            conexao_bd.commit()
+       
+        except mysql.connector.Error as erro:
+            return f"Erro ao cadastrar o usuario: {erro}"
+
     return render_template('usuarios.html') 
 
 # 7. Página de Conexão (Movida para o lugar correto)
