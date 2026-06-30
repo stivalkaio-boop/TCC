@@ -198,16 +198,20 @@
 }
 
 .QUADRO {
-    position: absolute;
+    position: fixed;
     font-family: sans-serif;
     border-radius: 12px;
-    top: 100px;
+    top: 150px;
     left: 730px;
     width: 20%;
     height: 50%;
     background-color: #FFFAFA;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 1000;
+}
+
+#titulo_adicionar{
+    padding: 10px;
 }
 
 .quadro-branco form {
@@ -243,7 +247,7 @@
     top: 100px;
     left: 730px;
     width: 20%;
-    height: 50%;
+    height: 30%;
     padding: 10px;
     gap: 15px;
     background-color: #FFFAFA;
@@ -264,7 +268,7 @@
 }
 
 #botaovoltar{
-    position: fixed;
+    position: absolute;
     text-align: center;
     text-decoration: none;
     justify-content: center;
@@ -293,9 +297,9 @@
 
 #nome_do_usuario{
 
-    position: absolute;
+    position: fixed;
     top: 400px;
-    left: 1350px;
+    left: 1400px;
     width: 200px;
     padding: 12px;
     border-radius: 8px;
@@ -304,9 +308,9 @@
 
 #senha_do_usuario{
 
-    position: absolute;
+    position: fixed;
     top: 500px;
-    left: 1350px;
+    left: 1400px;
     width: 200px;
     height: 50px;
     padding: 12px;
@@ -319,7 +323,7 @@
 #cadastro{
     position: absolute;
     top: 600px;
-    left: 1360px;
+    left: 1400px;
     width: 200px;
     height: 60px;
     border: none;
@@ -328,17 +332,17 @@
 }
 
 #cadastro:hover {
-    background-color: #e08300; /* Um tom de laranja mais escuro para o efeito */
+    background-color: #e08300;
 }
 
 #texto_usuario{
 
-    position: absolute;
+    position: fixed;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    top: 180px;
-    left: 1290px;
+    top: 220px;
+    left: 1280px;
 
 }
 
@@ -356,6 +360,20 @@
     justify-content: center;  /* Centraliza o texto na horizontal (esquerda/direita) */
     align-items: center;
 }    
+
+#navbar_adicionar{ 
+    text-decoration: none;
+    display: flex;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    font-size: 20px;
+    position: absolute;
+    background-color: #192a6b;
+    color: white;
+    padding: 20px;
+    z-index: 1050;
+}
 
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */
 @keyframes fadeEntrada {

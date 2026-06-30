@@ -99,7 +99,7 @@ def usuarios():
 
     return render_template('usuarios.html') 
 
-# 7. Página de Conexão (Movida para o lugar correto)
+# 7. Página de Conexão
 @app.route('/conexao')
 def conexao():
     try:
