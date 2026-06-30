@@ -244,7 +244,7 @@
     position: fixed;
     font-family: sans-serif;
     border-radius: 12px;
-    top: 100px;
+    top: 150px;
     left: 730px;
     width: 20%;
     height: 30%;
@@ -260,7 +260,7 @@
 #retirar{
     position: absolute;
     background-color: #ff9500;
-    top: 530px;
+    top: 400px;
     width: 150px;
     height: 80px;  
     left: 120px;
