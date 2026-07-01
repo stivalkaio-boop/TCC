@@ -204,7 +204,7 @@
     top: 150px;
     left: 730px;
     width: 20%;
-    height: 50%;
+    height: 55%;
     background-color: #FFFAFA;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 1000;
@@ -228,9 +228,6 @@
 }
 
 #retire {
-    position: absolute;
-    top: 100px;
-    left: 550px;
     height: 40px;
     width: 100px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
@@ -258,7 +255,6 @@
 }
 
 #retirar{
-    position: absolute;
     background-color: #ff9500;
     top: 400px;
     width: 150px;
@@ -322,7 +318,7 @@
 
 #cadastro{
     position: absolute;
-    top: 600px;
+    top: 700px;
     left: 1400px;
     width: 200px;
     height: 60px;
@@ -373,6 +369,31 @@
     color: white;
     padding: 20px;
     z-index: 1050;
+}
+
+#titulo_INICIAL{
+
+    position: absolute;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    top: 220px;
+    left: 730px;
+    color: #FFFAFA;
+
+}
+
+#tipo{
+
+    position: fixed;
+    top: 600px;
+    left: 1400px;
+    width: 200px;
+    height: 50px;
+    padding: 12px;
+    border-radius: 8px;
+    border-color: black;
+    border: 2px solid black;
 }
 
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */

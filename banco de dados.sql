@@ -27,3 +27,12 @@ CREATE TABLE usuarios (
 );
 
 SELECT * FROM usuarios;
+
+CREATE TABLE retiradas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50),
+    quantidade INT NOT NULL
+);
+
+SELECT * FROM retiradas;

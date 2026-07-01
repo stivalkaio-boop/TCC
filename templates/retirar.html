@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retirar</title>
+    <title>Movimentar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="static/styles.css">
     <link rel="icon" type="image/icon" href="static/logosenai.ico">
@@ -29,8 +29,8 @@
           Cadastrar
         </a>
           <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="/adicionar">Adicionar</a></li>
-          <li><a class="dropdown-item" href="/retirar">Retirar</a></li>
+          <li><a class="dropdown-item" href="/adicionar">Adicionar Novo Item</a></li>
+          <li><a class="dropdown-item" href="/retirar">Movimentar</a></li>
           </ul>
         <li class="nav-usuarios">
           <a class="nav-link active" aria-current="page" href="/usuarios" vertical-align: middle;>Cadastrar Usuarios</a>
@@ -42,12 +42,13 @@
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
  
-    <select id="retire">
-        <option selected value="Entrada">Entrada</option>
-        <option value="Saída">Saída</option>
-    </select>
-
+    
     <form id="Quadro" method="POST">
+              <select id="retire" name="operacao">
+                <option selected value="Entrada">Entrada</option>
+                <option value="Saida">Saída</option>
+            </select>
+
             <label for="nome">Nome do item:</label>
             <input type="text" name="nome" placeholder="Nome do item">
             <label for="nome">Categoria:</label>
