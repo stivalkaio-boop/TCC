@@ -34,9 +34,11 @@
           <li><a class="dropdown-item" href="/adicionar">Adicionar Novo Item</a></li>
           <li><a class="dropdown-item" href="/retirar">Movimentar</a></li>
           </ul>
+        {% if session['usuario_tipo'] == 'admin' %}
         <li class="nav-usuarios">
           <a class="nav-link active" aria-current="page" href="/usuarios" vertical-align: middle;>Cadastrar Usuarios</a>
         </li>
+        {% endif %}
         </li>
         </ul>
       </div>
@@ -79,9 +81,11 @@
           }
           </script>
 
-      <a id="botao_inicio" href="{{ url_for('painel') }}" class="btn btn-primary">
-      &larr; Voltar para a tela de Inicio
-      </a>
+{% if session['usuario_tipo'] == 'admin' %}
+    <a href="/INICIAL" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
+{% else %}
+    <a href="/inicial_usuario" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
+{% endif %}
 
     </body>
 </html>

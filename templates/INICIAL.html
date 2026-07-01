@@ -56,14 +56,14 @@
         </thead>
         <tbody>
               
-          {% for item in resultado %}
+          {% for perfil in resultado %}
 
           <tr>
-            <th scope="row">{{item[0]}}</th>
-            <td>{{item[1]}}</td>
-            <td>{{item[2]}}</td>
-            <td>{{item[3]}}</td>
-          </tr>
+            <td>{{ perfil['id'] }}</td>
+            <td>{{ perfil['nome'] }}</td>
+            <td>{{ perfil['senha'] }}</td>
+            <td>{{ perfil['tipo'] }}</td>
+        </tr>
 
           {%endfor%}
 

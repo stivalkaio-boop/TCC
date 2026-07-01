@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for 
+from flask import Flask, render_template, request, redirect, url_for , session
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = 'TCC_2026' 
+
 
 def obter_conexao():
     return mysql.connector.connect(
@@ -16,7 +18,6 @@ def obter_conexao():
 # 1. Página de login
 @app.route('/', methods=['GET', 'POST'])
 def login():
-
     if request.method == 'POST':
         usuario = request.form.get('username')
         senha = request.form.get('password')
@@ -25,28 +26,53 @@ def login():
         cursor = conexao.cursor(dictionary=True)
 
         query = "SELECT * FROM perfil WHERE nome = %s AND senha = %s"
-        cursor.execute(query, ( Nome, senha))
+        cursor.execute(query, (usuario, senha))
         usuario_encontrado = cursor.fetchone()
 
-        if usuario == "admin" and senha == "1234":
-            return redirect(url_for('painel'))
+        cursor.close()
+        conexao.close()
+
+        if usuario_encontrado:
+            session['usuario_id'] = usuario_encontrado['id']
+            session['usuario_nome'] = usuario_encontrado['nome']
+            session['usuario_tipo'] = usuario_encontrado['tipo']
+
+            if usuario_encontrado['tipo'] == 'admin':
+                return redirect(url_for('painel'))
+            else:
+                return redirect(url_for('painel_usuario'))
         else:
             return "Usuário ou senha incorretos!"
             
     return render_template('index.html')
 
-# 2. Página Inicial / Painel
+# 2. Página Inicial do Usuário
+
+@app.route('/inicial_usuario')
+def painel_usuario():
+
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+        
+    return render_template('inicial_usuario.html')
+
+# 3. Página Inicial
 @app.route('/INICIAL')
 def painel():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
  
     conexao_bd = obter_conexao()
-    cursor = conexao_bd.cursor()
-    cursor.execute("SELECT * FROM usuarios;")
+    cursor = conexao_bd.cursor(dictionary=True) 
+
+    cursor.execute("SELECT * FROM perfil;")
     resultado = cursor.fetchall()
+    cursor.close()
+    conexao_bd.close()
 
-    return render_template('INICIAL.html', resultado = resultado) 
+    return render_template('INICIAL.html', resultado=resultado)
 
-# 3. Página de Itens
+# 4. Página de Itens
 @app.route('/Itens')
 def Itens():
 
@@ -57,7 +83,7 @@ def Itens():
 
     return render_template('Itens.html', resultado = resultado) 
 
-# 4. Pagina de adicionar
+# 5. Pagina de adicionar
 @app.route('/adicionar', methods=['GET', 'POST'])
 def adicionar():
 
@@ -86,7 +112,7 @@ def adicionar():
     
     return render_template('adicionar.html')
 
-# 5. Pagina de retirar
+# 6. Pagina de retirar
 @app.route('/retirar', methods=['GET', 'POST'])
 def retirar():
     if request.method == 'POST':
@@ -125,35 +151,35 @@ def retirar():
 
     return render_template('retirar.html')
 
-# 6. Pagina de Usuario
+# 7. Pagina de Usuario
 @app.route('/usuarios', methods=['GET', 'POST'])
 def usuarios():
 
     if request.method == 'POST':
         nome = request.form.get('nome_usuario')
         senha = request.form.get('senha_usuario')
+        tipo = request.form.get('tipo_user_admin', 'user')
 
         try:
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor()
 
-            comando = "INSERT INTO usuarios (nome, senha) VALUES (%s, %s)"
-            valores = (nome, senha)
+            comando = "INSERT INTO perfil (nome, senha, tipo) VALUES (%s, %s, %s)"
+            valores = (nome, senha, tipo)
             cursor.execute(comando, valores)
             conexao_bd.commit()
+            
+            cursor.close()
+            conexao_bd.close()
        
             return redirect(url_for('usuarios'))
 
         except mysql.connector.Error as erro:
             return f"Erro ao cadastrar o usuario: {erro}"
 
-    return render_template('usuarios.html') 
+    return render_template('usuarios.html')
 
-
-# 7. USUARIO OU ADMIN
-
-
-# 8. Página de Conexão
+# 9. Página de Conexão
 @app.route('/conexao')
 def conexao():
     

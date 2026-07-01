@@ -161,11 +161,13 @@
 }
 
 #table {
+    position: center;
     width: 100% !important;    /* Preenche o limite que vamos dar abaixo */
-    max-width: 800px !important; /* ISSO impede a tabela de esticar até as bordas da tela */
+    max-width: 800px !important;
     border-collapse: collapse;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background-color: white;   /* Garante o fundo branco atrás das linhas */
+    background-color: white; 
+    table-layout: fixed;   /* Garante o fundo branco atrás das linhas */
 }
 
 #table th {
@@ -388,12 +390,18 @@
     position: fixed;
     top: 600px;
     left: 1400px;
-    width: 200px;
+    width: 100%;
     height: 50px;
     padding: 12px;
     border-radius: 8px;
     border-color: black;
     border: 2px solid black;
+}
+
+#bem_vindo{
+    position: absolute;
+    top: 100px;
+    left: 50px;
 }
 
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */
