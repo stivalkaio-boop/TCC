@@ -25,7 +25,8 @@ def login():
         conexao = obter_conexao()
         cursor = conexao.cursor(dictionary=True)
 
-        query = "SELECT * FROM perfil WHERE nome = %s AND senha = %s"
+        
+        query = "SELECT * FROM usuarios WHERE nome = %s AND senha = %s"
         cursor.execute(query, (usuario, senha))
         usuario_encontrado = cursor.fetchone()
 
@@ -35,7 +36,7 @@ def login():
         if usuario_encontrado:
             session['usuario_id'] = usuario_encontrado['id']
             session['usuario_nome'] = usuario_encontrado['nome']
-            session['usuario_tipo'] = usuario_encontrado['tipo']
+            session['usuario_tipo'] = usuario_encontrado['tipo'] 
 
             if usuario_encontrado['tipo'] == 'admin':
                 return redirect(url_for('painel'))
@@ -43,8 +44,9 @@ def login():
                 return redirect(url_for('painel_usuario'))
         else:
             return "Usuário ou senha incorretos!"
-            
+
     return render_template('index.html')
+
 
 # 2. Página Inicial do Usuário
 
@@ -65,7 +67,7 @@ def painel():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True) 
 
-    cursor.execute("SELECT * FROM perfil;")
+    cursor.execute("SELECT * FROM usuarios;")
     resultado = cursor.fetchall()
     cursor.close()
     conexao_bd.close()
@@ -164,7 +166,7 @@ def usuarios():
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor()
 
-            comando = "INSERT INTO perfil (nome, senha, tipo) VALUES (%s, %s, %s)"
+            comando = "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)"
             valores = (nome, senha, tipo)
             cursor.execute(comando, valores)
             conexao_bd.commit()
