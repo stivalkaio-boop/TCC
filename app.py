@@ -9,26 +9,10 @@ def obter_conexao():
     return mysql.connector.connect(
         host='localhost', 
         user='root',      
-        password='root',
+        password='',
         port=3306,
         database='almoxarifado'
     )
-def criar_admin():
-    conexao = obter_conexao()
-    cursor = conexao.cursor()
-
-    cursor.execute("SELECT * FROM usuarios WHERE nome='admin'")
-    admin = cursor.fetchone()
-
-    if admin is None:
-        cursor.execute("""
-            INSERT INTO usuarios (nome, senha, tipo)
-            VALUES ('admin', '1234', 'admin')
-        """)
-        conexao.commit()
-
-    cursor.close()
-    conexao.close()
 
 # 1. Página de login
 @app.route('/', methods=['GET', 'POST'])
@@ -208,5 +192,4 @@ def conexao():
         return f"Erro ao conectar ao banco de dados: {erro}"
 
 if __name__ == '__main__':
-    criar_admin()
     app.run(debug=True, host='0.0.0.0')

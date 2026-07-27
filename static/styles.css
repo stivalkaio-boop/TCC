@@ -183,6 +183,13 @@
     border-bottom: 1px solid #ddd;
 }
 
+#botaovoltar{
+    position: absolute;
+    bottom: 20px;      /* Distância de 20px da borda inferior */
+    left: 20px;        /* Distância de 20px da borda esquerda (mude para "right" se quiser no canto direito) */
+    z-index: 1000; 
+}
+
 #fundoadicionar{
     background-color: #192a6b;
 }
@@ -375,7 +382,7 @@
 
 #titulo_INICIAL{
 
-    position: absolute;
+    position: fixed;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
@@ -387,10 +394,10 @@
 
 #tipo{
 
-    position: fixed;
+    position: absolute;
     top: 600px;
     left: 1400px;
-    width: 100%;
+    width: 200px;
     height: 50px;
     padding: 12px;
     border-radius: 8px;

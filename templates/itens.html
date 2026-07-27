@@ -82,7 +82,7 @@
           </script>
 
 {% if session['usuario_tipo'] == 'admin' %}
-    <a href="/INICIAL" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
+    <a href="/INICIAL" id="botaovoltar" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
 {% else %}
     <a href="/inicial_usuario" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
 {% endif %}
