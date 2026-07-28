@@ -12,7 +12,7 @@
 <body>
 
   <img id="fundologin1" src="static/fundologin1.jpeg" alt="Senai">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="padding: 0px;">
+     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="padding: 0px;">
     <div id="navbar" class="container-fluid">
     <a class="navbar-brand" href="#">
     <img src="static/logo2.jpeg" alt="Logo" style="height: 30px; width: auto; margin-right: 10px; vertical-align: middle;">
@@ -24,22 +24,37 @@
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/Itens">
-        <img src="static/galpao2.png" alt="Ícone Itens" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">Itens</a>
+        <img src="static/galpao.png" alt="Ícone Itens" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">Itens</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Cadastrar
+        <li class="nav-cadastrar dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="static/simbolo_mais.png" alt="Ícone Cadastrar" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
+        Cadastrar
         </a>
           <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="/adicionar">Adicionar Novo Item</a></li>
-          <li><a class="dropdown-item" href="/retirar">Movimentar</a></li>
-          </ul>
+    <li>
+      <a class="dropdown-item" href="/adicionar">
+        <img src="static/adiciona.png" alt="Ícone Adicionar" style="height: 18px; width: 18px; margin-right: 5px; vertical-align: middle;">
+        Adicionar Novo Item
+      </a>
+    </li>
+<li>
+      <a class="dropdown-item" href="/retirar">
+        <!-- Ícone no segundo item do submenu -->
+        <img src="static/movimento.png" alt="Ícone Movimentar" style="height: 18px; width: 18px; margin-right: 5px; vertical-align: middle;">
+        Movimentar
+      </a>
+    </li>
+  </ul>
+</li>
         {% if session['usuario_tipo'] == 'admin' %}
-        <li class="nav-usuarios">
-          <a class="nav-link active" aria-current="page" href="/usuarios" vertical-align: middle;>Cadastrar Usuarios</a>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/usuarios">
+            <img src="static/icone_usuario.png" alt="Ícone Usuários" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
+            Cadastrar Usuários
+          </a>
         </li>
         {% endif %}
-        </li>
         </ul>
       </div>
   </div>
@@ -84,7 +99,7 @@
 {% if session['usuario_tipo'] == 'admin' %}
     <a href="/INICIAL" id="botaovoltar" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
 {% else %}
-    <a href="/inicial_usuario" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
+    <a href="/inicial_usuario" id="botaovoltar" class="btn btn-primary" style="margin-bottom: 20px;">Voltar para a tela de Início</a>
 {% endif %}
 
     </body>

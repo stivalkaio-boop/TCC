@@ -406,9 +406,18 @@
 }
 
 #bem_vindo{
-    position: absolute;
+    position: fixed;
     top: 100px;
     left: 50px;
+}
+
+#bem_vindo2{
+
+    position: fixed;
+    top: 100px;
+    left: 50px;
+    font-family: 'Montserrat', sans-serif;
+    color: #FFFAFA;   
 }
 
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */

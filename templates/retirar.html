@@ -22,23 +22,37 @@
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/Itens">
-        <img src="static/galpao2.png" alt="Ícone Itens" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">Itens</a>
+        <img src="static/galpao.png" alt="Ícone Itens" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">Itens</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Cadastrar
+        <li class="nav-cadastrar dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="static/simbolo_mais.png" alt="Ícone Cadastrar" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
+        Cadastrar
         </a>
           <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="/adicionar">Adicionar Novo Item</a></li>
-          <li><a class="dropdown-item" href="/retirar">Movimentar</a></li>
-          </ul>
-
+    <li>
+      <a class="dropdown-item" href="/adicionar">
+        <img src="static/adiciona.png" alt="Ícone Adicionar" style="height: 18px; width: 18px; margin-right: 5px; vertical-align: middle;">
+        Adicionar Novo Item
+      </a>
+    </li>
+<li>
+      <a class="dropdown-item" href="/retirar">
+        <!-- Ícone no segundo item do submenu -->
+        <img src="static/movimento.png" alt="Ícone Movimentar" style="height: 18px; width: 18px; margin-right: 5px; vertical-align: middle;">
+        Movimentar
+      </a>
+    </li>
+  </ul>
+</li>
         {% if session['usuario_tipo'] == 'admin' %}
-        <li class="nav-usuarios">
-          <a class="nav-link active" aria-current="page" href="/usuarios" vertical-align: middle;>Cadastrar Usuarios</a>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/usuarios">
+            <img src="static/icone_usuario.png" alt="Ícone Usuários" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
+            Cadastrar Usuários
+          </a>
         </li>
         {% endif %}
-        </li>
         </ul>
       </div>
   </div>
@@ -70,9 +84,15 @@
         }
     </script>
 
-    <a id="botaovoltar" href="{{ url_for('painel') }}" class="btn btn-primary">
-    &larr; Voltar para a tela de Inicio
+{% if session['usuario_tipo'] == 'admin' %}
+    <a href="{{ url_for('painel') }}" id="botaovoltar" class="btn btn-primary">
+        &larr; Voltar para a tela de Início
     </a>
+{% else %}
+    <a href="{{ url_for('painel_usuario') }}" id="botaovoltar" class="btn btn-primary">
+        &larr; Voltar para a tela de Início
+    </a>
+{% endif %}
     
 </body>
 </html>

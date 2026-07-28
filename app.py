@@ -66,12 +66,16 @@ def painel():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True) 
 
+    cursor.execute("SELECT * FROM usuarios WHERE id = %s;", (session['usuario_id'],))
+    usuario_logado = cursor.fetchone()
+
     cursor.execute("SELECT * FROM usuarios;")
     resultado = cursor.fetchall()
+    
     cursor.close()
     conexao_bd.close()
 
-    return render_template('INICIAL.html', resultado=resultado)
+    return render_template('INICIAL.html', resultado=resultado, usuario=usuario_logado)
 
 # 4. Página de Itens
 @app.route('/Itens')
