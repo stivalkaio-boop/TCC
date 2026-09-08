@@ -23,6 +23,16 @@
     left: 1510px;
 }
 
+#texto_login{
+    position: absolute;
+    font-weight: 600;
+    color: #ddd;
+    width: 180px;
+    top: 300px;
+    left: 1510px;
+    font-size: 17.5px;
+}
+
 .formulario-login{
     position: absolute;
     top: 50%;
