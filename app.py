@@ -184,7 +184,30 @@ def usuarios():
 
     return render_template('usuarios.html')
 
-# 9. Página de Conexão
+# 9. Página do histórico
+@app.route('/historico', methods=['GET', 'POST'])
+def historico():
+    conexao = obter_conexao()
+    cursor = conexao.cursor(
+        dictionary=True
+    )
+
+    cursor.execute(
+        "SELECT id, produto_nome, tipo_movimentacao, quantidade, usuario, "
+        "DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') as data_formatada "
+        "FROM historico "
+        "ORDER BY data_movimentacao DESC"
+    )
+    
+    movimentacoes = cursor.fetchall()
+
+    cursor.close()
+    conexao.close()
+
+    # Passa a lista de movimentações para o HTML
+    return render_template("historico.html", movimentacoes=movimentacoes)
+
+# 10. Página de Conexão
 @app.route('/conexao')
 def conexao():
     

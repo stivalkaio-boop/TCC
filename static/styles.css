@@ -119,15 +119,6 @@
     z-index: -1;
 }
 
-#parafuso {
-    position: absolute;
-    left: 1290px;
-    top: 270px;
-    width: 30px;      /* Define uma largura fixa pequena */
-    height: 30px;     /* Define uma altura fixa pequena */
-    object-fit: cover; /* Faz a imagem se ajustar ao quadradinho sem distorcer ou esticar */
-}
-
 .modal-zoom {
     display: none; /* Esconde o bloco */
     position: fixed;
@@ -428,6 +419,48 @@
     left: 50px;
     font-family: 'Montserrat', sans-serif;
     color: #FFFAFA;   
+}
+
+#relatorio{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  
+}
+
+.historico_tabela{ 
+    width: 90%;
+    max-width: 1000px;
+    background: #192a6b;
+    padding: 20px;
+    color: #000;  
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    margin: auto; 
+}
+
+.badge{
+    color: #000;
+}
+
+#table thead th {
+    background-color: #192a6b; /* Um azul ainda mais escuro para destacar o topo */
+    color: #ffffff; /* Texto do cabeçalho totalmente branco */
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #2a3b7c;
+}
+
+#table tbody td {
+    padding: 12px;
+    color: #000; /* CORRIGIDO: Texto do histórico em branco para dar leitura */
+    border-bottom: 1px solid #2a3b7c; /* Linha divisória sutil */
+}
+
+#texto_relatorio{
+    position: center;
+    color: #ddd;
 }
 
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */

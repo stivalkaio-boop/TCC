@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela inicial</title>
+    <title>Relatório</title>
     <link rel="stylesheet" href="static/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="icon" type="image/icon" href="static/logosenai.ico">
 </head>
-<body>
-    <img id="fundologin1" src="static/fundologin1.jpeg" alt="Senai">
+<body id="relatorio">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="padding: 0px;">
     <div id="navbar" class="container-fluid">
     <a class="navbar-brand" href="#">
@@ -45,51 +44,61 @@
     </li>
   </ul>
 </li>
+
           <li class="nav-usuario">
           <a class="nav-link active" aria-current="page" href="/historico">
           <img src="static/relatorio.png" alt="Ícone Usuários" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
           Relatório
           </a>
-
-          <li class="nav-usuario">
-          <a class="nav-link active" aria-current="page" href="/usuarios">
+          
+        {% if session['usuario_tipo'] == 'admin' %}
+        <li class="nav-item">
+          <a class="nav-link" href="/usuarios">
           <img src="static/icone_usuario.png" alt="Ícone Usuários" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
-          Cadastrar Usuários
-          </a>
+          Cadastrar Usuários</a>
         </li>
-        </li>
-        </ul>
-  </div>
-</nav>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        {% endif %}
+      </nav>
 
-      <h1 id="bem_vindo2">Bem vindo {{ usuario['nome'] }}!</h1>
-
-        <div id="caixa-tabela">
-        <table id="table">
+      <!---tabela_historico-->
+<div class="historico_tabela">
+    <h2 id="texto_relatorio">📋 Histórico de Movimentações - Almoxarifado</h2>
+    
+    <table id="table">
         <thead>
-          <h1 id="titulo_INICIAL">Usuários Cadastrados</h1>
-
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Senha</th>
-            <th scope="col">Tipo</th>
-          </tr>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Produto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Usuário</th>
+                <th scope="col">Data/Hora</th>
+            </tr>
         </thead>
         <tbody>
-              
-          {% for perfil in resultado %}
-
-          <tr>
-            <td>{{ perfil['id'] }}</td>
-            <td>{{ perfil['nome'] }}</td>
-            <td>{{ perfil['senha'] }}</td>
-            <td>{{ perfil['tipo'] }}</td>
-        </tr>
-
-          {%endfor%}
-
+            <!-- O Jinja2 faz o loop na lista que veio do Flask -->
+            {% for linha in movimentacoes %}
+            <tr>
+                <td>{{ linha.id }}</td>
+                <td>{{ linha.produto_nome }}</td>
+                <td>
+                    <!-- A classe CSS assume o mesmo nome do tipo ('Entrada' ou 'Saída') -->
+                    <span class="badge {{ linha.tipo_movimentacao }}">
+                        {{ linha.tipo_movimentacao }}
+                    </span>
+                </td>
+                <td>{{ linha.quantidade }}</td>
+                <td>{{ linha.usuario }}</td>
+                <td>{{ linha.data_formatada }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">Nenhuma movimentação registrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

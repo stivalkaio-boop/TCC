@@ -32,13 +32,15 @@ VALUES
 
 SELECT * FROM usuarios;
 
-CREATE TABLE retiradas (
+CREATE TABLE historico (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    categoria VARCHAR(50),
-    quantidade INT NOT NULL
+    produto_nome VARCHAR(255) NOT NULL,
+    tipo_movimentacao ENUM('Entrada', 'Saída') NOT NULL,
+    quantidade INT NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
+    data_movimentacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-SELECT * FROM retiradas;
+SELECT * FROM historico;
 
 DROP TABLE usuarios;
