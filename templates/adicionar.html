@@ -50,6 +50,7 @@
           <img src="static/relatorio.png" alt="Ícone Usuários" style="height: 20px; width: 20px; margin-right: 5px; vertical-align: middle;">
           Relatório
           </a>
+          </li> <!-- NOVO: fecha o item Relatório -->
           
         {% if session['usuario_tipo'] == 'admin' %}
         <li class="nav-item">
@@ -58,6 +59,10 @@
           Cadastrar Usuários</a>
         </li>
         {% endif %}
+      </ul>   
+    </div> 
+  </div>
+</nav>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
@@ -84,7 +89,7 @@
             <input type="number" name="quantidade" placeholder="Quantidade">
             <label for="nome">Preço do item:</label>
             <input type="text" name="preco" placeholder="Preço">
-             <label for="foto">foto do seu Item:</label>
+             <label for="foto">Foto do seu Item:</label>
             <input type="file" id="foto" name="foto" accept="image/*">
             <button id="adicionar" type="submit" class="btn btn-primary"> Adicionar novo item</button>
     </form>
@@ -97,6 +102,9 @@
             document.getElementById('QUADRO').style.display = 'none';
         }
     </script>
+
+    </div>
+</div>
         
 </body>
 </html>

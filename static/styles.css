@@ -198,11 +198,10 @@
 #adicionar {
     background-color: #ff9500;
     color: black;
-    position: absolute;
-    top: 500px;
+    align-self: center;
+    margin-top: 10px;
     width: 150px;
     height: 80px;  
-    left: 120px;
     border-radius: 6px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -212,9 +211,12 @@
     font-family: sans-serif;
     border-radius: 12px;
     top: 150px;
-    left: 730px;
-    width: 20%;
-    height: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: auto;                    
+    max-height: calc(100vh - 170px); 
+    overflow-y: auto;
     background-color: #FFFAFA;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 1000;
@@ -225,17 +227,21 @@
 }
 
 .quadro-branco form {
-    position: fixed;
-    padding: 10px;
+    padding: 10px 10px 25px;  
     gap: 15px;
     display: flex;
     flex-direction: column;
 }
 
 .quadro-branco input[type="text"],
+
 .quadro-branco input[type="number"] { 
-    width: 350px;
+    width: 100%;                    
 }
+
+.quadro-branco,
+.quadro-branco label,
+.quadro-branco h3 { color: #000; }
 
 #retire {
     height: 40px;
@@ -444,22 +450,31 @@
     color: #000;
 }
 
+#table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
 #table thead th {
-    background-color: #192a6b; /* Um azul ainda mais escuro para destacar o topo */
-    color: #ffffff; /* Texto do cabeçalho totalmente branco */
+    background-color: #192a6b;
+    color: #ffffff;
     padding: 12px;
-    text-align: left;
+    text-align: center;
     border-bottom: 2px solid #2a3b7c;
 }
 
 #table tbody td {
     padding: 12px;
-    color: #000; /* CORRIGIDO: Texto do histórico em branco para dar leitura */
-    border-bottom: 1px solid #2a3b7c; /* Linha divisória sutil */
+    color: #000;
+    text-align: center;              /* NOVO */
+    vertical-align: middle;          /* NOVO */
+    overflow-wrap: anywhere;  
+    border-bottom: 2px solid #2a3b7c; 
 }
 
 #texto_relatorio{
-    position: center;
+    text-align: center; 
     color: #ddd;
 }
 
