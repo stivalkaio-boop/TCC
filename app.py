@@ -14,7 +14,15 @@ def obter_conexao():
         database='almoxarifado',
         charset='utf8mb4'   # necessário para gravar "Saída" com acento
     )
- 
+
+def login_obrigatorio(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'usuario_id' not in session:
+            return redirect(url_for('login'))
+        return func(*args, **kwargs)
+    return wrapper
+
 def admin_obrigatorio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -27,8 +35,6 @@ def admin_obrigatorio(func):
  
 # ---------------------------------------------------------------
 # Função que grava no histórico.
-# Chame SEMPRE antes do commit(), para o registro entrar na mesma
-# transação da operação (se a operação falhar, o histórico também não grava).
 # ---------------------------------------------------------------
 def registrar_historico(cursor, produto_nome, tipo, quantidade=0):
     usuario = session.get('usuario_nome', 'desconhecido')
@@ -85,12 +91,14 @@ def login():
  
 # 2. Página Inicial do Usuário
 @app.route('/inicial_usuario')
+@login_obrigatorio
 def painel_usuario():
     return render_template('inicial_usuario.html')
  
  
 # 3. Página Inicial (admin)
 @app.route('/INICIAL')
+@admin_obrigatorio
 def painel():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True)
@@ -109,6 +117,7 @@ def painel():
  
 # 4. Página de Itens
 @app.route('/Itens')
+@login_obrigatorio
 def Itens():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor()
@@ -123,6 +132,7 @@ def Itens():
  
 # 5. Página de adicionar
 @app.route('/adicionar', methods=['GET', 'POST'])
+@login_obrigatorio
 def adicionar():
     if request.method == 'POST':
         nome = request.form.get('nome')
@@ -163,6 +173,7 @@ def adicionar():
  
 # 6. Página de retirar / movimentar
 @app.route('/retirar', methods=['GET', 'POST'])
+@login_obrigatorio
 def retirar():
     if request.method == 'POST':
         operacao = request.form.get('operacao')
@@ -217,6 +228,7 @@ def retirar():
  
 # 7. Página de Usuários (somente admin)
 @app.route('/usuarios', methods=['GET', 'POST'])
+@admin_obrigatorio
 def usuarios():
     if request.method == 'POST':
         nome = request.form.get('nome_usuario')
@@ -252,6 +264,7 @@ def usuarios():
  
 # 9. Página do histórico (relatório)
 @app.route('/historico')
+@login_obrigatorio
 def historico():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True)
@@ -271,7 +284,7 @@ def historico():
     return render_template('historico.html', movimentacoes=movimentacoes)
  
  
-# 10. Página de teste de conexão
+# 10. Página de conexão
 @app.route('/conexao')
 def conexao():
     try:

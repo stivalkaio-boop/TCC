@@ -11,7 +11,7 @@
 <body id="relatorio">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="padding: 0px;">
         <div id="navbar" class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url_for('login') }}">
                 <img src="{{ url_for('static', filename='logo2.jpeg') }}" alt="Logo" style="height: 30px; width: auto; margin-right: 10px; vertical-align: middle;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,8 @@
  
     <div class="historico_tabela">
         <h2 id="texto_relatorio">📋 Histórico de Movimentações - Almoxarifado</h2>
- 
+
+    <div class="tabela-scroll"> 
         <table id="table">
             <thead>
                 <tr>
@@ -114,6 +115,7 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div> 
     </div>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 

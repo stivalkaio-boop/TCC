@@ -478,6 +478,19 @@
     color: #ddd;
 }
 
+.tabela-scroll {
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+#table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #1c2b6b;  
+}
+
+
 /* 1. Cria o efeito: a página começa invisível e aparece suavemente */
 @keyframes fadeEntrada {
     from {
