@@ -299,11 +299,8 @@ def conexao():
 
 
 
- # 11. APIs (JSON) para o app React Native — somente GET e POST
-# Mesmo estilo das outras rotas: cada uma abre a conexão, executa e fecha.
-# =====================================================================
-
-# Protege todas as rotas /api/ (menos o login). /api/usuarios é só para admin.
+ # 11. APIs (JSON) para o app React Native
+# Protege todas as rotas/api/(menos o login)/api/usuarios é só para admin.
 @app.before_request
 def proteger_api():
     if not request.path.startswith('/api/') or request.path == '/api/login':
