@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import mysql.connector
  
 app = Flask(__name__)
@@ -293,7 +293,231 @@ def conexao():
         return "Conexão com o banco de dados [almoxarifado] realizada com sucesso!"
     except mysql.connector.Error as erro:
         return f"Erro ao conectar ao banco de dados: {erro}"
- 
- 
+
+
+
+
+
+
+ # 11. APIs (JSON) para o app React Native — somente GET e POST
+# Mesmo estilo das outras rotas: cada uma abre a conexão, executa e fecha.
+# =====================================================================
+
+# Protege todas as rotas /api/ (menos o login). /api/usuarios é só para admin.
+@app.before_request
+def proteger_api():
+    if not request.path.startswith('/api/') or request.path == '/api/login':
+        return None
+    if 'usuario_id' not in session:
+        return jsonify(erro='Não autenticado'), 401
+    if request.path.startswith('/api/usuarios') and session.get('usuario_tipo') != 'admin':
+        return jsonify(erro='Apenas administradores'), 403
+
+
+# Erros de banco nas rotas /api/ voltam como JSON
+@app.errorhandler(mysql.connector.Error)
+def erro_banco(erro):
+    if not request.path.startswith('/api/'):
+        raise erro
+    return jsonify(erro=f'Erro no banco de dados: {erro}'), 500
+
+
+# POST /api/login   {"nome": "maria", "senha": "1234"}
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    dados = request.get_json(silent=True) or request.form
+
+    con = obter_conexao()
+    cursor = con.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT id, nome, tipo FROM usuarios WHERE nome = %s AND senha = %s",
+        (dados.get('nome'), dados.get('senha'))
+    )
+    usuario = cursor.fetchone()
+    cursor.close()
+    con.close()
+
+    if not usuario:
+        return jsonify(erro='Usuário ou senha incorretos'), 401
+
+    session['usuario_id'] = usuario['id']
+    session['usuario_nome'] = usuario['nome']
+    session['usuario_tipo'] = usuario['tipo']
+    return jsonify(usuario)
+
+
+# GET /api/itens            (opcional: ?q=texto para buscar por nome ou categoria)
+@app.route('/api/itens', methods=['GET'])
+def api_listar_itens():
+    busca = '%' + request.args.get('q', '').strip() + '%'
+
+    con = obter_conexao()
+    cursor = con.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT * FROM Itens WHERE nome LIKE %s OR categoria LIKE %s ORDER BY nome",
+        (busca, busca)
+    )
+    itens = cursor.fetchall()
+    cursor.close()
+    con.close()
+
+    return jsonify(itens)
+
+
+# GET /api/itens/<id>
+@app.route('/api/itens/<int:item_id>', methods=['GET'])
+def api_buscar_item(item_id):
+    con = obter_conexao()
+    cursor = con.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Itens WHERE id = %s", (item_id,))
+    item = cursor.fetchone()
+    cursor.close()
+    con.close()
+
+    if not item:
+        return jsonify(erro='Item não encontrado'), 404
+    return jsonify(item)
+
+
+# POST /api/itens   {"nome": "Parafuso", "categoria": "Ferragens", "quantidade": 10, "preco": "12,50", "foto": "parafuso.png"}
+@app.route('/api/itens', methods=['POST'])
+def api_criar_item():
+    dados = request.get_json(silent=True) or request.form
+
+    nome = dados.get('nome')
+    categoria = dados.get('categoria') or ''
+    foto = dados.get('foto') or ''
+    if foto:
+        foto = 'static/' + foto   # mesmo padrão da rota /adicionar
+
+    try:
+        quantidade = int(dados.get('quantidade') or 0)
+        preco = float(str(dados.get('preco') or 0).replace(',', '.'))
+    except (ValueError, TypeError):
+        return jsonify(erro='Quantidade ou preço inválido'), 400
+    if not nome or quantidade < 0 or preco < 0:
+        return jsonify(erro='Informe o nome; quantidade e preço não podem ser negativos'), 400
+
+    item = (nome, categoria, quantidade, preco, foto)
+    query = ("INSERT INTO Itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
+             "VALUES (%s, %s, %s, %s, %s);")
+
+    con = obter_conexao()
+    cursor = con.cursor()
+    cursor.execute(query, item)
+    registrar_historico(cursor, nome, 'Cadastro', quantidade)
+    con.commit()
+    novo_id = cursor.lastrowid
+    cursor.close()
+    con.close()
+
+    return jsonify(id=novo_id), 201
+
+
+# POST /api/movimentacoes   {"operacao": "Entrada" ou "Saida", "nome": "Parafuso", "quantidade": 5}
+@app.route('/api/movimentacoes', methods=['POST'])
+def api_movimentar():
+    dados = request.get_json(silent=True) or request.form
+
+    operacao = dados.get('operacao')
+    nome = dados.get('nome')
+    try:
+        quantidade = int(dados.get('quantidade') or 0)
+    except (ValueError, TypeError):
+        quantidade = 0
+    if not nome or quantidade <= 0:
+        return jsonify(erro='Informe o nome do item e uma quantidade maior que zero'), 400
+
+    if operacao == 'Entrada':
+        tipo = 'Entrada'
+        query = "UPDATE Itens SET quantidade_estoque = quantidade_estoque + %s WHERE nome = %s"
+        item = (quantidade, nome)
+    elif operacao == 'Saida':
+        tipo = 'Saída'
+        query = ("UPDATE Itens SET quantidade_estoque = quantidade_estoque - %s "
+                 "WHERE nome = %s AND quantidade_estoque >= %s")
+        item = (quantidade, nome, quantidade)
+    else:
+        return jsonify(erro='Operação inválida. Use "Entrada" ou "Saida"'), 400
+
+    con = obter_conexao()
+    cursor = con.cursor()
+    cursor.execute(query, item)
+
+    # Nenhuma linha alterada = item não existe ou estoque insuficiente
+    if cursor.rowcount == 0:
+        cursor.close()
+        con.close()
+        return jsonify(erro='Item não encontrado ou estoque insuficiente'), 409
+
+    registrar_historico(cursor, nome, tipo, quantidade)
+    con.commit()
+
+    cursor.execute("SELECT quantidade_estoque FROM Itens WHERE nome = %s", (nome,))
+    estoque_atual = cursor.fetchone()[0]
+    cursor.close()
+    con.close()
+
+    return jsonify(estoque_atual=estoque_atual), 201
+
+
+# GET /api/historico        (opcional: ?limit=100, máximo 500)
+@app.route('/api/historico', methods=['GET'])
+def api_historico():
+    limite = min(max(request.args.get('limit', 100, type=int), 1), 500)
+
+    # como há parâmetro (LIMIT), os % do DATE_FORMAT precisam ser escritos como %%
+    query = ("SELECT id, produto_nome, tipo_movimentacao, quantidade, usuario, "
+             "DATE_FORMAT(data_movimentacao, '%%d/%%m/%%Y %%H:%%i:%%s') AS data_formatada "
+             "FROM historico ORDER BY data_movimentacao DESC, id DESC LIMIT %s")
+
+    con = obter_conexao()
+    cursor = con.cursor(dictionary=True)
+    cursor.execute(query, (limite,))
+    movimentacoes = cursor.fetchall()
+    cursor.close()
+    con.close()
+
+    return jsonify(movimentacoes)
+
+
+# GET /api/usuarios         (só admin — sem a senha)
+@app.route('/api/usuarios', methods=['GET'])
+def api_listar_usuarios():
+    con = obter_conexao()
+    cursor = con.cursor(dictionary=True)
+    cursor.execute("SELECT id, nome, tipo FROM usuarios ORDER BY nome")
+    lista = cursor.fetchall()
+    cursor.close()
+    con.close()
+
+    return jsonify(lista)
+
+
+# POST /api/usuarios        (só admin)   {"nome": "maria", "senha": "1234", "tipo": "user" ou "admin"}
+@app.route('/api/usuarios', methods=['POST'])
+def api_criar_usuario():
+    dados = request.get_json(silent=True) or request.form
+
+    nome = dados.get('nome')
+    senha = dados.get('senha')
+    tipo = dados.get('tipo') or 'user'
+    if not nome or not senha or tipo not in ('admin', 'user'):
+        return jsonify(erro='Informe nome, senha e um tipo válido ("admin" ou "user")'), 400
+
+    con = obter_conexao()
+    cursor = con.cursor()
+    cursor.execute(
+        "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
+        (nome, senha, tipo)
+    )
+    registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
+    con.commit()
+    novo_id = cursor.lastrowid
+    cursor.close()
+    con.close()
+
+    return jsonify(id=novo_id), 201
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
