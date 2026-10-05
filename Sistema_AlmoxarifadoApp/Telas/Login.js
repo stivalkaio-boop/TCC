@@ -17,21 +17,27 @@ import { API_URL } from '../config';
 
 // ---------------------------------------------------------------
 // AJUSTES DA IMAGEM DE FUNDO
-// ZOOM: 1 = preenche a tela toda. Menor que 1 = imagem mais afastada
-//       (pode aparecer faixa azul em cima/embaixo). Ex.: 0.9, 0.8
+// ZOOM: 1 = preenche a tela toda (é o mínimo; valores menores viram 1,
+//       para não aparecer faixa azul). Maior que 1 = aproxima a imagem.
 // DESLOCAR_X: positivo empurra a imagem para a DIREITA (Neymar vai
 //       para o centro), negativo empurra para a esquerda.
 // DESLOCAR_Y: positivo empurra para baixo, negativo para cima.
 // ---------------------------------------------------------------
-const ZOOM = 0.9;
-const DESLOCAR_X = 80;
-const DESLOCAR_Y = 0;
+const ZOOM = 1;
+const DESLOCAR_X = 4;
+const DESLOCAR_Y = 0.45;
 
 const IMAGEM_FUNDO = require('../assets/NEYMAR1.jpeg');
 const fonte = Image.resolveAssetSource(IMAGEM_FUNDO);
 
 export default function Login({ navigation }) {
-  const { width, height } = useWindowDimensions();
+  const janela = useWindowDimensions();
+
+  // tamanho REAL da área da tela (medido), pois a altura da janela
+  // pode ser menor que a área visível e deixar uma faixa azul embaixo
+  const [tamanho, setTamanho] = useState(null);
+  const width = tamanho ? tamanho.width : janela.width;
+  const height = tamanho ? tamanho.height : janela.height;
   const telaGrande = width >= 768; // tablet/web: imagem 60% + form à direita
 
   const [username, setUsername] = useState('');
@@ -40,7 +46,7 @@ export default function Login({ navigation }) {
   // --- cálculo da posição da imagem de fundo ---
   const areaLargura = telaGrande ? width * 0.6 : width;
   const escalaCover = Math.max(areaLargura / fonte.width, height / fonte.height);
-  const escala = escalaCover * ZOOM;
+  const escala = escalaCover * Math.max(ZOOM, 1);
   const imgLargura = fonte.width * escala;
   const imgAltura = fonte.height * escala;
 
@@ -49,7 +55,11 @@ export default function Login({ navigation }) {
   if (imgLargura >= areaLargura) {
     imgEsquerda = Math.min(0, Math.max(areaLargura - imgLargura, imgEsquerda));
   }
-  const imgTopo = (height - imgAltura) / 2 + DESLOCAR_Y;
+  let imgTopo = (height - imgAltura) / 2 + DESLOCAR_Y;
+  // impede faixa vazia em cima/embaixo
+  if (imgAltura >= height) {
+    imgTopo = Math.min(0, Math.max(height - imgAltura, imgTopo));
+  }
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -81,7 +91,18 @@ export default function Login({ navigation }) {
   };
 
   return (
-    <View style={styles.fundo}>
+    <View
+      style={styles.fundo}
+      onLayout={(e) => {
+        const { width: w, height: h } = e.nativeEvent.layout;
+        // guarda sempre o maior tamanho (o teclado aberto diminui a altura e não deve mexer na imagem)
+        setTamanho((anterior) =>
+          anterior && anterior.width === w && anterior.height >= h
+            ? anterior
+            : { width: w, height: h }
+        );
+      }}
+    >
       {/* imagem do fundo */}
       <View style={[styles.areaImagem, { width: areaLargura }]}>
         <Image
