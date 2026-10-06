@@ -7,9 +7,9 @@ app.secret_key = 'TCC_2026'
 
 def obter_conexao():
     return mysql.connector.connect(
-        host='localhost',
+        host='db',
         user='root',
-        password='',
+        password='mysql_root',
         port=3306,
         database='almoxarifado',
         charset='utf8mb4'   # necessário para gravar "Saída" com acento
