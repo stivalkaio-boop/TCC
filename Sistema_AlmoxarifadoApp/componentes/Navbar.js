@@ -72,13 +72,13 @@ export default function Navbar({ navigation, nome, tipo }) {
                 <Pressable style={styles.itemMenu} onPress={() => irPara('adicionar')}>
                   <Text style={styles.textoSubMenu}>Adicionar Novo Item</Text>
                 </Pressable>
-                <Pressable style={styles.itemMenu} onPress={() => emBreve('Movimentar')}>
-                  <Text style={styles.textoSubMenu}>Movimentar</Text>
+                <Pressable style={styles.itemMenu} onPress={() => irPara('retirar')}>
+                    <Text style={styles.textoSubMenu}>Movimentar</Text>
                 </Pressable>
               </View>
             )}
 
-            <Pressable style={styles.itemMenu} onPress={() => emBreve('Relatório')}>
+            <Pressable style={styles.itemMenu} onPress={() => emBreve('historico')}>
               <Ionicons name="document-text" size={20} color="#fff" />
               <Text style={styles.textoMenu}>Relatório</Text>
             </Pressable>
@@ -87,7 +87,7 @@ export default function Navbar({ navigation, nome, tipo }) {
             {tipo === 'admin' && (
               <Pressable
                 style={styles.itemMenu}
-                onPress={() => emBreve('Cadastrar Usuários')}
+                onPress={() => irPara('usuarios')}
               >
                 <Ionicons name="person" size={20} color="#fff" />
                 <Text style={styles.textoMenu}>Cadastrar Usuários</Text>

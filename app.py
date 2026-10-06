@@ -509,7 +509,7 @@ def api_listar_usuarios():
     return jsonify(lista)
 
 
-# POST /api/usuarios        (só admin)   {"nome": "maria", "senha": "1234", "tipo": "user" ou "admin"}
+# POST /api/usuarios        (só admin)
 @app.route('/api/usuarios', methods=['POST'])
 def api_criar_usuario():
     dados = request.get_json(silent=True) or request.form
