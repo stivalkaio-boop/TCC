@@ -11,11 +11,11 @@ app.secret_key = 'TCC_2026'
 
 def obter_conexao():
     return mysql.connector.connect(
-        host='db',
-        user='root',
-        password='mysql_root',
-        port=3306,
-        database='almoxarifado',
+        host=os.environ.get('DB_HOST', 'localhost'),
+        user=os.environ.get('DB_USER', 'root'),
+        password=os.environ.get('DB_PASSWORD', ''),
+        port=int(os.environ.get('DB_PORT', 3306)),
+        database=os.environ.get('DB_NAME', 'almoxarifado'),
         charset='utf8mb4'   # necessário para gravar "Saída" com acento
     )
 
