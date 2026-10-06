@@ -2,29 +2,22 @@ import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   ActivityIndicator,
-  Alert,
   Image,
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 
+import Navbar from '../componentes/Navbar';
 import { API_URL } from '../config';
 
 // Imagem de fundo (copie a foto da fábrica da pasta static do site para a pasta assets)
 const IMAGEM_FUNDO = require('../assets/fundologin1.jpeg');
 
 export default function Inicial({ navigation, route }) {
-  const { nome } = route.params;
-  const insets = useSafeAreaInsets();
+  const { nome, tipo } = route.params;
 
-  const [menuAberto, setMenuAberto] = useState(false);
-  const [cadastrarAberto, setCadastrarAberto] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
@@ -38,10 +31,10 @@ export default function Inicial({ navigation, route }) {
         });
         const data = await response.json();
 
-        if (data.ok) {
-          setUsuarios(data.usuarios);
+        if (response.ok) {
+          setUsuarios(data);
         } else {
-          setErro(data.mensagem);
+          setErro(data.erro || 'Erro ao buscar usuários.');
         }
       } catch (e) {
         setErro('Não foi possível conectar ao servidor.');
@@ -53,39 +46,17 @@ export default function Inicial({ navigation, route }) {
     carregarUsuarios();
   }, []);
 
-  // as outras telas ainda não existem no app: troque pelo navigation.navigate('NomeDaTela')
-  const abrir = (titulo) => {
-    setMenuAberto(false);
-    Alert.alert(titulo, 'Esta tela ainda será criada no app.');
-  };
-
-  const sair = () => {
-    setMenuAberto(false);
-    navigation.replace('Login');
-  };
-
   return (
     <View style={styles.container}>
       {/* fundo desfocado */}
       <Image
-        source={require('../assets/fundologin1.jpeg')}
+        source={IMAGEM_FUNDO}
         style={StyleSheet.absoluteFill}
         resizeMode="cover"
         blurRadius={8}
       />
 
-      {/* navbar */}
-      <View style={[styles.navbar, { paddingTop: insets.top + 10 }]}>
-        <Image
-          source={require('../assets/logo1.jpeg')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-
-        <Pressable onPress={() => setMenuAberto(true)} hitSlop={10}>
-          <Ionicons name="menu" size={30} color="#fff" />
-        </Pressable>
-      </View>
+      <Navbar navigation={navigation} nome={nome} tipo={tipo} />
 
       {/* conteúdo */}
       <ScrollView contentContainerStyle={styles.conteudo}>
@@ -102,7 +73,6 @@ export default function Inicial({ navigation, route }) {
             <View style={styles.linhaCabecalho}>
               <Text style={[styles.celulaCabecalho, styles.colunaId]}>ID</Text>
               <Text style={[styles.celulaCabecalho, styles.coluna]}>Nome</Text>
-              <Text style={[styles.celulaCabecalho, styles.coluna]}>Senha</Text>
               <Text style={[styles.celulaCabecalho, styles.coluna]}>Tipo</Text>
             </View>
 
@@ -110,72 +80,12 @@ export default function Inicial({ navigation, route }) {
               <View key={u.id} style={styles.linha}>
                 <Text style={[styles.celula, styles.colunaId]}>{u.id}</Text>
                 <Text style={[styles.celula, styles.coluna]}>{u.nome}</Text>
-                <Text style={[styles.celula, styles.coluna]}>{u.senha}</Text>
                 <Text style={[styles.celula, styles.coluna]}>{u.tipo}</Text>
               </View>
             ))}
           </View>
         )}
       </ScrollView>
-
-      {/* menu da navbar */}
-      <Modal
-        visible={menuAberto}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setMenuAberto(false)}
-      >
-        <Pressable style={styles.fundoMenu} onPress={() => setMenuAberto(false)}>
-          <View style={[styles.menu, { marginTop: insets.top + 60 }]}>
-            <Pressable style={styles.itemMenu} onPress={() => abrir('Itens')}>
-              <Ionicons name="home" size={20} color="#fff" />
-              <Text style={styles.textoMenu}>Itens</Text>
-            </Pressable>
-
-            <Pressable
-              style={styles.itemMenu}
-              onPress={() => setCadastrarAberto(!cadastrarAberto)}
-            >
-              <Ionicons name="add" size={20} color="#fff" />
-              <Text style={[styles.textoMenu, { flex: 1 }]}>Cadastrar</Text>
-              <Ionicons
-                name={cadastrarAberto ? 'chevron-up' : 'chevron-down'}
-                size={18}
-                color="#fff"
-              />
-            </Pressable>
-
-            {cadastrarAberto && (
-              <View style={styles.subMenu}>
-                <Pressable style={styles.itemMenu} onPress={() => abrir('Adicionar')}>
-                  <Text style={styles.textoSubMenu}>Adicionar</Text>
-                </Pressable>
-                <Pressable style={styles.itemMenu} onPress={() => abrir('Retirar')}>
-                  <Text style={styles.textoSubMenu}>Retirar</Text>
-                </Pressable>
-              </View>
-            )}
-
-            <Pressable style={styles.itemMenu} onPress={() => abrir('Relatório')}>
-              <Ionicons name="document-text" size={20} color="#fff" />
-              <Text style={styles.textoMenu}>Relatório</Text>
-            </Pressable>
-
-            <Pressable
-              style={styles.itemMenu}
-              onPress={() => abrir('Cadastrar Usuários')}
-            >
-              <Ionicons name="person" size={20} color="#fff" />
-              <Text style={styles.textoMenu}>Cadastrar Usuários</Text>
-            </Pressable>
-
-            <Pressable style={[styles.itemMenu, styles.itemSair]} onPress={sair}>
-              <Ionicons name="log-out" size={20} color="#ff9500" />
-              <Text style={[styles.textoMenu, { color: '#ff9500' }]}>Sair</Text>
-            </Pressable>
-          </View>
-        </Pressable>
-      </Modal>
 
       <StatusBar style="light" />
     </View>
@@ -187,22 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#192a6b',
   },
-
-  // navbar
-  navbar: {
-    backgroundColor: '#1c2c6e',
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  logo: {
-    width: 110,
-    height: 34,
-  },
-
-  // conteúdo
+  
   conteudo: {
     padding: 20,
     paddingBottom: 40,
@@ -227,10 +122,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // tabela
+
   tabela: {
     width: '100%',
   },
+
   linhaCabecalho: {
     flexDirection: 'row',
     backgroundColor: '#1c2c6e',
@@ -261,40 +157,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-  // menu
-  fundoMenu: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.35)',
-    alignItems: 'flex-end',
-  },
-  menu: {
-    width: 240,
-    marginRight: 12,
-    backgroundColor: '#1c2c6e',
-    borderRadius: 14,
-    paddingVertical: 6,
-  },
-  itemMenu: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-  },
-  textoMenu: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  subMenu: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    paddingLeft: 32,
-  },
-  textoSubMenu: {
-    color: '#fff',
-    fontSize: 15,
-  },
-  itemSair: {
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.15)',
-  },
 });

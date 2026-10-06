@@ -1,6 +1,10 @@
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import mysql.connector
+import base64
+import os
+import uuid
+from werkzeug.utils import secure_filename
  
 app = Flask(__name__)
 app.secret_key = 'TCC_2026'
@@ -295,10 +299,6 @@ def conexao():
         return f"Erro ao conectar ao banco de dados: {erro}"
 
 
-
-
-
-
  # 11. APIs (JSON) para o app React Native
 # Protege todas as rotas/api/(menos o login)/api/usuarios é só para admin.
 @app.before_request
@@ -376,16 +376,14 @@ def api_buscar_item(item_id):
     return jsonify(item)
 
 
-# POST /api/itens   {"nome": "Parafuso", "categoria": "Ferragens", "quantidade": 10, "preco": "12,50", "foto": "parafuso.png"}
+# POST /api/itens   {"nome": "Parafuso", "categoria": "Ferragens", "quantidade": 10,
+#                    "preco": "12,50", "foto_base64": "...", "foto_nome": "foto.jpg"}
 @app.route('/api/itens', methods=['POST'])
 def api_criar_item():
     dados = request.get_json(silent=True) or request.form
 
     nome = dados.get('nome')
     categoria = dados.get('categoria') or ''
-    foto = dados.get('foto') or ''
-    if foto:
-        foto = 'static/' + foto   # mesmo padrão da rota /adicionar
 
     try:
         quantidade = int(dados.get('quantidade') or 0)
@@ -394,6 +392,26 @@ def api_criar_item():
         return jsonify(erro='Quantidade ou preço inválido'), 400
     if not nome or quantidade < 0 or preco < 0:
         return jsonify(erro='Informe o nome; quantidade e preço não podem ser negativos'), 400
+
+    # Foto: o app manda a imagem em base64. Salva em static/ e guarda o caminho no banco.
+    foto = ''
+    foto_base64 = dados.get('foto_base64')
+    if foto_base64:
+        extensao = os.path.splitext(secure_filename(dados.get('foto_nome') or ''))[1].lower()
+        if extensao not in ('.jpg', '.jpeg', '.png', '.webp', '.gif'):
+            extensao = '.jpg'
+        nome_arquivo = uuid.uuid4().hex + extensao
+
+        try:
+            conteudo = base64.b64decode(foto_base64)
+        except ValueError:
+            return jsonify(erro='Foto inválida'), 400
+
+        with open(os.path.join(app.static_folder, nome_arquivo), 'wb') as arquivo:
+            arquivo.write(conteudo)
+        foto = 'static/' + nome_arquivo
+
+    print('DEBUG foto recebida:', bool(foto_base64), '| salva como:', foto)  # pode apagar depois
 
     item = (nome, categoria, quantidade, preco, foto)
     query = ("INSERT INTO Itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
