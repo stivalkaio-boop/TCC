@@ -120,7 +120,7 @@ def painel():
  
  
 # 4. Página de itens
-@app.route('/Itens')
+@app.route('/itens')
 @login_obrigatorio
 def itens():
     conexao_bd = obter_conexao()
@@ -366,7 +366,7 @@ def api_listar_itens():
 def api_buscar_item(item_id):
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Itens WHERE id = %s", (item_id,))
+    cursor.execute("SELECT * FROM itens WHERE id = %s", (item_id,))
     item = cursor.fetchone()
     cursor.close()
     con.close()
