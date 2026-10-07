@@ -351,7 +351,7 @@ def api_listar_itens():
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
     cursor.execute(
-        "SELECT * FROM Itens WHERE nome LIKE %s OR categoria LIKE %s ORDER BY nome",
+        "SELECT * FROM Itens WHERE nome LIKE %s OR categoria LIKE %s ORDER BY id ASC",
         (busca, busca)
     )
     itens = cursor.fetchall()
@@ -376,8 +376,7 @@ def api_buscar_item(item_id):
     return jsonify(item)
 
 
-# POST /api/itens   {"nome": "Parafuso", "categoria": "Ferragens", "quantidade": 10,
-#                    "preco": "12,50", "foto_base64": "...", "foto_nome": "foto.jpg"}
+# POST /api/itens 
 @app.route('/api/itens', methods=['POST'])
 def api_criar_item():
     dados = request.get_json(silent=True) or request.form
@@ -393,7 +392,6 @@ def api_criar_item():
     if not nome or quantidade < 0 or preco < 0:
         return jsonify(erro='Informe o nome; quantidade e preço não podem ser negativos'), 400
 
-    # Foto: o app manda a imagem em base64. Salva em static/ e guarda o caminho no banco.
     foto = ''
     foto_base64 = dados.get('foto_base64')
     if foto_base64:
@@ -476,19 +474,19 @@ def api_movimentar():
     return jsonify(estoque_atual=estoque_atual), 201
 
 
-# GET /api/historico        (opcional: ?limit=100, máximo 500)
+# GET /api/historico
 @app.route('/api/historico', methods=['GET'])
 def api_historico():
     limite = min(max(request.args.get('limit', 100, type=int), 1), 500)
 
-    # como há parâmetro (LIMIT), os % do DATE_FORMAT precisam ser escritos como %%
     query = ("SELECT id, produto_nome, tipo_movimentacao, quantidade, usuario, "
-             "DATE_FORMAT(data_movimentacao, '%%d/%%m/%%Y %%H:%%i:%%s') AS data_formatada "
-             "FROM historico ORDER BY data_movimentacao DESC, id DESC LIMIT %s")
+             "DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS data_formatada "
+             "FROM historico ORDER BY data_movimentacao ASC, id ASC "
+             f"LIMIT {limite}")
 
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
-    cursor.execute(query, (limite,))
+    cursor.execute(query)
     movimentacoes = cursor.fetchall()
     cursor.close()
     con.close()
@@ -496,7 +494,7 @@ def api_historico():
     return jsonify(movimentacoes)
 
 
-# GET /api/usuarios         (só admin — sem a senha)
+# GET /api/usuarios         (só admin)
 @app.route('/api/usuarios', methods=['GET'])
 def api_listar_usuarios():
     con = obter_conexao()

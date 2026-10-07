@@ -65,31 +65,30 @@
 
       <h1 id="bem_vindo2">Bem vindo {{ usuario['nome'] }}!</h1>
 
-        <div id="caixa-tabela">
-        <table id="table">
-        <thead>
-          <h1 id="titulo_INICIAL">Usuários Cadastrados</h1>
+<div id="caixa-tabela">
+  <h1 id="titulo_INICIAL">Usuários Cadastrados</h1>
 
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Senha</th>
-            <th scope="col">Tipo</th>
-          </tr>
-        </thead>
-        <tbody>
-              
-          {% for perfil in resultado %}
-
-          <tr>
-            <td>{{ perfil['id'] }}</td>
-            <td>{{ perfil['nome'] }}</td>
-            <td>{{ perfil['senha'] }}</td>
-            <td>{{ perfil['tipo'] }}</td>
-        </tr>
-
-          {%endfor%}
-
+  <table id="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Senha</th>
+        <th scope="col">Tipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for perfil in resultado %}
+      <tr>
+        <td>{{ perfil['id'] }}</td>
+        <td>{{ perfil['nome'] }}</td>
+        <td>{{ perfil['senha'] }}</td>
+        <td>{{ perfil['tipo'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 </body>
 </html>

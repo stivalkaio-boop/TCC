@@ -8,6 +8,7 @@ import Itens from './Telas/itens';
 import adicionar from './Telas/adicionar';
 import retirar from './Telas/retirar';
 import usuarios from './Telas/usuarios';
+import historico from './Telas/historico';
 
 const Stack = createNativeStackNavigator();
  
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="adicionar" component={adicionar} />
         <Stack.Screen name="retirar" component={retirar} />
         <Stack.Screen name="usuarios" component={usuarios}/>
+        <Stack.Screen name="historico" component={historico}/>        
       </Stack.Navigator>
     </NavigationContainer>
   );

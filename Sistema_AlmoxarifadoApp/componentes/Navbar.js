@@ -3,8 +3,8 @@ import { Alert, Image, Modal, Pressable, StyleSheet, Text, View } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-// Navbar reutilizável: logo + botão de menu.
-// Uso:  <Navbar navigation={navigation} nome={nome} tipo={tipo} />
+
+
 export default function Navbar({ navigation, nome, tipo }) {
   const insets = useSafeAreaInsets();
   const [menuAberto, setMenuAberto] = useState(false);
@@ -78,7 +78,7 @@ export default function Navbar({ navigation, nome, tipo }) {
               </View>
             )}
 
-            <Pressable style={styles.itemMenu} onPress={() => emBreve('historico')}>
+            <Pressable style={styles.itemMenu} onPress={() => irPara('historico')}>
               <Ionicons name="document-text" size={20} color="#fff" />
               <Text style={styles.textoMenu}>Relatório</Text>
             </Pressable>

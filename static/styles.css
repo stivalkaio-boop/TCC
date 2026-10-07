@@ -152,23 +152,29 @@
     top: 850px;
   }
 
-    #caixa-tabela {
+#caixa-tabela {
     display: flex;
-    justify-content: center;   /* Centraliza horizontalmente */
-    align-items: center;       /* Centraliza verticalmente */
-    min-height: 75vh;          /* Dá uma altura boa para a tela */
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 120px 20px 20px;   /* espaço fixo no topo: a tabela não sobe nem desce */
     width: 100%;
 }
 
+#titulo_INICIAL {
+    position: static !important;  /* tira o título da posição fixa/absoluta */
+    margin: 0 0 12px 0 !important;
+    color: white;
+    text-align: center;
+}
+
 #table {
-    position: center;
-    width: 100% !important;    /* Preenche o limite que vamos dar abaixo */
+    width: 100% !important;
     max-width: 800px !important;
     border-collapse: collapse;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background-color: white; 
-    table-layout: fixed;   /* Garante o fundo branco atrás das linhas */
+    background-color: white;
+    table-layout: fixed;
 }
 
 #table th {
