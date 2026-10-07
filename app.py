@@ -119,19 +119,19 @@ def painel():
     return render_template('INICIAL.html', resultado=resultado, usuario=usuario_logado)
  
  
-# 4. Página de Itens
-@app.route('/Itens')
+# 4. Página de itens
+@app.route('/itens')
 @login_obrigatorio
-def Itens():
+def itens():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor()
-    cursor.execute("SELECT * FROM Itens;")
+    cursor.execute("SELECT * FROM itens;")
     resultado = cursor.fetchall()
  
     cursor.close()
     conexao_bd.close()
  
-    return render_template('Itens.html', resultado=resultado)
+    return render_template('itens.html', resultado=resultado)
  
  
 # 5. Página de adicionar
@@ -153,14 +153,14 @@ def adicionar():
             cursor = conexao_bd.cursor()
  
             cursor.execute(
-                "INSERT INTO Itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
+                "INSERT INTO itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
                 "VALUES (%s, %s, %s, %s, %s)",
                 (nome, categoria, quantidade, preco, foto)
             )
             registrar_historico(cursor, nome, 'Cadastro', quantidade)
             conexao_bd.commit()
  
-            return redirect(url_for('Itens'))
+            return redirect(url_for('itens'))
  
         except mysql.connector.Error as erro:
             if conexao_bd:
@@ -189,12 +189,12 @@ def retirar():
  
         if operacao == 'Saida':
             tipo = 'Saída'
-            comando = ("UPDATE Itens SET quantidade_estoque = quantidade_estoque - %s "
+            comando = ("UPDATE itens SET quantidade_estoque = quantidade_estoque - %s "
                        "WHERE nome = %s AND quantidade_estoque >= %s")
             valores = (quantidade, nome, quantidade)
         elif operacao == 'Entrada':
             tipo = 'Entrada'
-            comando = ("UPDATE Itens SET quantidade_estoque = quantidade_estoque + %s "
+            comando = ("UPDATE itens SET quantidade_estoque = quantidade_estoque + %s "
                        "WHERE nome = %s")
             valores = (quantidade, nome)
         else:
@@ -215,7 +215,7 @@ def retirar():
             registrar_historico(cursor, nome, tipo, quantidade)
             conexao_bd.commit()
  
-            return redirect(url_for('Itens'))
+            return redirect(url_for('itens'))
  
         except mysql.connector.Error as erro:
             if conexao_bd:
@@ -366,7 +366,7 @@ def api_listar_itens():
 def api_buscar_item(item_id):
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Itens WHERE id = %s", (item_id,))
+    cursor.execute("SELECT * FROM itens WHERE id = %s", (item_id,))
     item = cursor.fetchone()
     cursor.close()
     con.close()
@@ -412,7 +412,7 @@ def api_criar_item():
     print('DEBUG foto recebida:', bool(foto_base64), '| salva como:', foto)  # pode apagar depois
 
     item = (nome, categoria, quantidade, preco, foto)
-    query = ("INSERT INTO Itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
+    query = ("INSERT INTO itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
              "VALUES (%s, %s, %s, %s, %s);")
 
     con = obter_conexao()
@@ -443,11 +443,11 @@ def api_movimentar():
 
     if operacao == 'Entrada':
         tipo = 'Entrada'
-        query = "UPDATE Itens SET quantidade_estoque = quantidade_estoque + %s WHERE nome = %s"
+        query = "UPDATE itens SET quantidade_estoque = quantidade_estoque + %s WHERE nome = %s"
         item = (quantidade, nome)
     elif operacao == 'Saida':
         tipo = 'Saída'
-        query = ("UPDATE Itens SET quantidade_estoque = quantidade_estoque - %s "
+        query = ("UPDATE itens SET quantidade_estoque = quantidade_estoque - %s "
                  "WHERE nome = %s AND quantidade_estoque >= %s")
         item = (quantidade, nome, quantidade)
     else:
@@ -466,7 +466,7 @@ def api_movimentar():
     registrar_historico(cursor, nome, tipo, quantidade)
     con.commit()
 
-    cursor.execute("SELECT quantidade_estoque FROM Itens WHERE nome = %s", (nome,))
+    cursor.execute("SELECT quantidade_estoque FROM itens WHERE nome = %s", (nome,))
     estoque_atual = cursor.fetchone()[0]
     cursor.close()
     con.close()
