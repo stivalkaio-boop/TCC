@@ -1,7 +1,7 @@
 
 USE almoxarifado;
 
-CREATE TABLE Itens (
+CREATE TABLE itens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     categoria VARCHAR(50),
@@ -10,7 +10,7 @@ CREATE TABLE Itens (
     foto VARCHAR(255)
 );
 
-SELECT * FROM Itens;
+SELECT * FROM itens;
 
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
