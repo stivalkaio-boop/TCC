@@ -17,6 +17,6 @@ services:
       MYSQL_DATABASE: almoxarifado
       MYSQL_ROOT_PASSWORD: "mysql_root"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./banco-de-dados.sql:/docker-entrypoint-initdb.d/banco.sql

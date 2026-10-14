@@ -5,6 +5,7 @@ import base64
 import os
 import uuid
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
  
 app = Flask(__name__)
 app.secret_key = 'TCC_2026'
@@ -38,6 +39,21 @@ def admin_obrigatorio(func):
     return wrapper
  
 # ---------------------------------------------------------------
+# Confere usuário e senha (a senha no banco é um hash).
+# O cursor precisa ser dictionary=True.
+# ---------------------------------------------------------------
+def verificar_login(cursor, nome, senha):
+    cursor.execute(
+        "SELECT id, nome, senha, tipo FROM usuarios WHERE nome = %s",
+        (nome,)
+    )
+    usuario = cursor.fetchone()
+    if usuario and check_password_hash(usuario['senha'], senha or ''):
+        return usuario
+    return None
+
+
+# ---------------------------------------------------------------
 # Função que grava no histórico.
 # ---------------------------------------------------------------
 def registrar_historico(cursor, produto_nome, tipo, quantidade=0):
@@ -61,11 +77,7 @@ def login():
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor(dictionary=True)
  
-            cursor.execute(
-                "SELECT * FROM usuarios WHERE nome = %s AND senha = %s",
-                (usuario, senha)
-            )
-            usuario_encontrado = cursor.fetchone()
+            usuario_encontrado = verificar_login(cursor, usuario, senha)
  
             if not usuario_encontrado:
                 return "Usuário ou senha incorretos!"
@@ -107,10 +119,10 @@ def painel():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True)
  
-    cursor.execute("SELECT * FROM usuarios WHERE id = %s;", (session['usuario_id'],))
+    cursor.execute("SELECT id, nome, tipo FROM usuarios WHERE id = %s;", (session['usuario_id'],))
     usuario_logado = cursor.fetchone()
  
-    cursor.execute("SELECT * FROM usuarios;")
+    cursor.execute("SELECT id, nome, tipo FROM usuarios;")
     resultado = cursor.fetchall()
  
     cursor.close()
@@ -246,7 +258,7 @@ def usuarios():
  
             cursor.execute(
                 "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
-                (nome, senha, tipo)
+                (nome, generate_password_hash(senha), tipo)
             )
             registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
             conexao_bd.commit()
@@ -326,11 +338,7 @@ def api_login():
 
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
-    cursor.execute(
-        "SELECT id, nome, tipo FROM usuarios WHERE nome = %s AND senha = %s",
-        (dados.get('nome'), dados.get('senha'))
-    )
-    usuario = cursor.fetchone()
+    usuario = verificar_login(cursor, dados.get('nome'), dados.get('senha'))
     cursor.close()
     con.close()
 
@@ -340,7 +348,7 @@ def api_login():
     session['usuario_id'] = usuario['id']
     session['usuario_nome'] = usuario['nome']
     session['usuario_tipo'] = usuario['tipo']
-    return jsonify(usuario)
+    return jsonify(id=usuario['id'], nome=usuario['nome'], tipo=usuario['tipo'])
 
 
 # GET /api/itens            (opcional: ?q=texto para buscar por nome ou categoria)
@@ -522,7 +530,7 @@ def api_criar_usuario():
     cursor = con.cursor()
     cursor.execute(
         "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
-        (nome, senha, tipo)
+        (nome, generate_password_hash(senha), tipo)
     )
     registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
     con.commit()
