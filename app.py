@@ -540,5 +540,40 @@ def api_criar_usuario():
 
     return jsonify(id=novo_id), 201
 
+# ---------------------------------------------------------------
+# Garante que o usuário admin existe com senha em hash.
+# ---------------------------------------------------------------
+def garantir_admin(nome='admin', senha_padrao='1234'):
+    con = obter_conexao()
+    cursor = con.cursor(dictionary=True)
+    try:
+        # Garante que a coluna cabe o hash (~160 caracteres)
+        cursor.execute("ALTER TABLE usuarios MODIFY senha VARCHAR(255) NOT NULL")
+
+        cursor.execute("SELECT id, senha FROM usuarios WHERE nome = %s", (nome,))
+        admin = cursor.fetchone()
+
+        if not admin:
+            cursor.execute(
+                "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, 'admin')",
+                (nome, generate_password_hash(senha_padrao))
+            )
+            print(f'[setup] Usuário "{nome}" criado.')
+        elif not admin['senha'].startswith(('scrypt:', 'pbkdf2:')):
+            # Senha antiga em texto puro (ou hash cortado): refaz o hash
+            cursor.execute(
+                "UPDATE usuarios SET senha = %s, tipo = 'admin' WHERE id = %s",
+                (generate_password_hash(senha_padrao), admin['id'])
+            )
+            print(f'[setup] Senha do "{nome}" convertida para hash.')
+
+        con.commit()
+    except mysql.connector.Error as erro:
+        print(f'[setup] Não foi possível preparar o admin: {erro}')
+    finally:
+        cursor.close()
+        con.close()
+
 if __name__ == '__main__':
+    garantir_admin()
     app.run(debug=True, host='0.0.0.0')

@@ -1,2 +1,4 @@
 FLASK
 mysql-connector-python
+bcrypt
+docker compose up --build

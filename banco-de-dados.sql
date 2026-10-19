@@ -1,4 +1,4 @@
-
+CREATE DATABASE almoxarifado;
 USE almoxarifado;
 
 CREATE TABLE itens (
@@ -19,13 +19,7 @@ CREATE TABLE usuarios (
     tipo VARCHAR(50) NOT NULL
 );
 
-INSERT INTO usuarios (nome,senha,tipo)
-VALUES
-('admin', '1234','admin');
-
 SELECT * FROM usuarios;
-
-DROP TABLE IF EXISTS historico;
  
 CREATE TABLE historico (
     id INT AUTO_INCREMENT PRIMARY KEY,
