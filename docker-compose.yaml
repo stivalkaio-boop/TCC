@@ -5,18 +5,26 @@ services:
       - "5000:5000"
     environment:
       DB_HOST: db
-      DB_PASSWORD: mysql_root
+      DB_PASSWORD: ""
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    restart: on-failure
     volumes:
       - ./static:/app/static
 
   db:
     image: mysql:8.0
+    command: --default-time-zone=-03:00
     environment:
       MYSQL_DATABASE: almoxarifado
-      MYSQL_ROOT_PASSWORD: "mysql_root"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3307:3306"
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
     volumes:
       - ./banco-de-dados.sql:/docker-entrypoint-initdb.d/banco.sql

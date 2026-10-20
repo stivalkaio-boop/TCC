@@ -1,4 +1,4 @@
-CREATE DATABASE almoxarifado;
+
 USE almoxarifado;
 
 CREATE TABLE itens (
@@ -12,7 +12,7 @@ CREATE TABLE itens (
 
 SELECT * FROM itens;
 
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,

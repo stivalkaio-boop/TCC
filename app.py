@@ -106,7 +106,7 @@ def login():
  
  
 # 2. Página Inicial do Usuário
-@app.route('/inicial_usuario')
+@app.route('/Inicial_usuario')
 @login_obrigatorio
 def painel_usuario():
     return render_template('inicial_usuario.html')
@@ -359,7 +359,7 @@ def api_listar_itens():
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
     cursor.execute(
-        "SELECT * FROM Itens WHERE nome LIKE %s OR categoria LIKE %s ORDER BY id ASC",
+        "SELECT * FROM itens WHERE nome LIKE %s OR categoria LIKE %s ORDER BY id ASC",
         (busca, busca)
     )
     itens = cursor.fetchall()

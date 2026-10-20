@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 
-
 export default function Navbar({ navigation, nome, tipo }) {
   const insets = useSafeAreaInsets();
   const [menuAberto, setMenuAberto] = useState(false);
