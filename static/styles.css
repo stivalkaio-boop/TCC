@@ -1,36 +1,26 @@
+/* ===== BASE ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;   /* nunca aparece barra horizontal */
+}
+
 #fundo{
     margin: 0;
     padding: 0;
-    overflow: hidden;
     background-color: #192a6b;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
+/* ===== LOGIN ===== */
 #fundologin{
     position: fixed;
     width: 60%;
     height: 100vh;
     object-fit: cover;
     z-index: -1;
-    scale: 1.0;
-}
-
-#logo{
-    position: absolute;
-    width: 180px;
-    top: 200px;
-    left: 1510px;
-}
-
-#texto_login{
-    position: absolute;
-    font-weight: 600;
-    color: #ddd;
-    width: 180px;
-    top: 300px;
-    left: 1510px;
-    font-size: 17.5px;
 }
 
 .formulario-login{
@@ -44,15 +34,23 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 320px;
+    width: 360px;
+    max-width: 90vw;
     backdrop-filter: blur(8px);
 }
 
-.formulario-login h1{
-    color: white;
-    text-align: center;
+#logo{
+    width: 180px;
+    align-self: center;
 }
 
+#texto_login{
+    color: #ddd;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    margin: 0;
+}
 
 .campo input{
     width: 100%;
@@ -77,9 +75,10 @@
     background-color: #e68600;
 }
 
+/* ===== NAVBAR ===== */
 #navbar{
     font-size: 20px;
-    top: 0px;
+    top: 0;
     position: fixed;
     background-color: #192a6b;
     color: white;
@@ -87,40 +86,45 @@
     z-index: 1000;
 }
 
-
-.navbar .navbar-brand {
-    color: #ffffff !important;
-}
-
-
-.navbar .nav-link {
-    color: #ffffff !important;
-}
-
-
-.navbar .nav-link:hover {
-    color: #ff9500 !important;
-}
-
-
-.navbar .navbar-toggler-icon {
-    filter: invert(1); 
-}
-
-#fundologin1{
-    background-position: center;
-    position: fixed;
-    top: 20px;
+#navbar_adicionar{
+    text-decoration: none;
+    display: flex;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 110%;
+    font-size: 20px;
+    position: absolute;
+    background-color: #192a6b;
+    color: white;
+    padding: 20px;
+    z-index: 1050;
+}
+
+.navbar .navbar-brand { color: #ffffff !important; }
+.navbar .nav-link { color: #ffffff !important; }
+.navbar .nav-link:hover { color: #ff9500 !important; }
+.navbar .navbar-toggler-icon { filter: invert(1); }
+
+/* ===== FUNDOS ===== */
+#fundologin1{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
     background: url('fundologin1.jpeg') center/cover no-repeat;
     filter: blur(4px);
     z-index: -1;
 }
 
+#fundoadicionar,
+#fundoretirar{
+    background-color: #192a6b;
+}
+
+/* ===== MODAL ZOOM ===== */
 .modal-zoom {
-    display: none; /* Esconde o bloco */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -130,13 +134,13 @@
     z-index: 9999;
     justify-content: center;
     align-items: center;
-  }
+}
 
-  .modal-zoom:target {
+.modal-zoom:target {
     display: flex;
-  }
+}
 
-  .fechar-zoom {
+.fechar-zoom {
     position: absolute;
     top: 20px;
     right: 30px;
@@ -144,27 +148,24 @@
     font-size: 50px;
     text-decoration: none;
     font-weight: bold;
-  }
+}
 
-    #botao_inicio{
-    position: absolute;
-    left: 10px;
-    top: 850px;
-  }
-
+/* ===== TABELA INICIAL ===== */
 #caixa-tabela {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 120px 20px 20px;   /* espaço fixo no topo: a tabela não sobe nem desce */
+    padding: 120px 20px 20px;
     width: 100%;
 }
 
 #titulo_INICIAL {
-    position: static !important;  /* tira o título da posição fixa/absoluta */
+    position: static !important;
     margin: 0 0 12px 0 !important;
-    color: white;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    color: #FFFAFA;
     text-align: center;
 }
 
@@ -177,37 +178,72 @@
     table-layout: fixed;
 }
 
-#table th {
-    text-align: center;
+#table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     background-color: #192a6b;
-    color: white;
+    color: #ffffff;
     padding: 12px;
-}
-
-#table td {
-    padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 2px solid #2a3b7c;
 }
 
+#table tbody td {
+    padding: 12px;
+    color: #000;
+    text-align: center;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+    border-bottom: 2px solid #2a3b7c;
+}
+
+/* ===== BOTOES DE VOLTAR / INICIO ===== */
 #botaovoltar{
-    position: absolute;
-    bottom: 20px;      /* Distância de 20px da borda inferior */
-    left: 20px;        /* Distância de 20px da borda esquerda (mude para "right" se quiser no canto direito) */
-    z-index: 1000; 
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    width: 230px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    background-color: #ff9500;
+    color: #ddd;
+    z-index: 1000;
 }
 
-#fundoadicionar{
+#botao_inicio{
+    position: fixed;
+    left: 10px;
+    bottom: 20px;
+}
+
+#botao_voltar{
+    position: fixed;
+    left: 52%;
+    bottom: 10px;
+    height: 50px;
+    width: 200px;
+    padding: 8px;
+    color: #ffffff;
     background-color: #192a6b;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* ===== ADICIONAR ===== */
 #adicionar {
     background-color: #ff9500;
     color: black;
     align-self: center;
     margin-top: 10px;
     width: 150px;
-    height: 80px;  
+    height: 80px;
     border-radius: 6px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -220,8 +256,9 @@
     left: 50%;
     transform: translateX(-50%);
     width: 400px;
-    height: auto;                    
-    max-height: calc(100vh - 170px); 
+    max-width: 92vw;
+    height: auto;
+    max-height: calc(100vh - 170px);
     overflow-y: auto;
     background-color: #FFFAFA;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
@@ -233,30 +270,26 @@
 }
 
 .quadro-branco form {
-    padding: 10px 10px 25px;  
+    padding: 10px 10px 25px;
     gap: 15px;
     display: flex;
     flex-direction: column;
 }
 
 .quadro-branco input[type="text"],
-
-.quadro-branco input[type="number"] { 
-    width: 100%;                    
+.quadro-branco input[type="number"] {
+    width: 100%;
 }
 
 .quadro-branco,
 .quadro-branco label,
 .quadro-branco h3 { color: #000; }
 
+/* ===== RETIRAR ===== */
 #retire {
     height: 40px;
     width: 100px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-#fundoretirar{
-    background-color: #192a6b;
 }
 
 #Quadro {
@@ -264,9 +297,11 @@
     font-family: sans-serif;
     border-radius: 12px;
     top: 150px;
-    left: 730px;
-    width: 20%;
-    height: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(300px, 25vw, 420px);
+    height: auto;
+    min-height: 30vh;
     padding: 10px;
     gap: 15px;
     background-color: #FFFAFA;
@@ -278,71 +313,67 @@
 
 #retirar{
     background-color: #ff9500;
-    top: 400px;
     width: 150px;
-    height: 80px;  
-    left: 120px;
+    height: 80px;
     border-radius: 10px;
 }
 
-#botaovoltar{
-    position: absolute;
-    text-align: center;
-    text-decoration: none;
-    justify-content: center;
-    bottom: 10px;
-    padding-top: 20px;
-    height: 40px;
-    width: 230px;
-    top: 850px;
-    left: 10px;
-    background-color: #ff9500;
-    color: #ddd;
-    text-decoration: none;
-}
-
-
+/* ===== CADASTRO DE USUARIO ===== */
 #fundousuario{
-
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     width: 50%;
     height: 100vh;
     object-fit: cover;
     z-index: -1;
 }
 
-#nome_do_usuario{
-
+/* Todos os campos ficam centralizados na metade direita da tela (75%) */
+#texto_usuario,
+#nome_do_usuario,
+#senha_do_usuario,
+#tipo,
+#cadastro{
     position: fixed;
-    top: 400px;
-    left: 1400px;
-    width: 200px;
+    left: 75%;
+    transform: translateX(-50%);
+    width: min(240px, 40vw);
+}
+
+#texto_usuario{
+    top: 20vh;
+    width: auto;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+#nome_do_usuario{
+    top: 37vh;
+    height: 50px;
     padding: 12px;
     border-radius: 8px;
-    height: 50px;
 }
 
 #senha_do_usuario{
-
-    position: fixed;
-    top: 500px;
-    left: 1400px;
-    width: 200px;
+    top: 46vh;
     height: 50px;
     padding: 12px;
     border-radius: 8px;
-    border-color: black;
     border: 2px solid black;
+}
 
+#tipo{
+    top: 55vh;
+    height: 50px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid black;
 }
 
 #cadastro{
-    position: absolute;
-    top: 700px;
-    left: 1400px;
-    width: 200px;
+    top: 65vh;
     height: 60px;
     border: none;
     background-color: #ff9500;
@@ -353,71 +384,7 @@
     background-color: #e08300;
 }
 
-#texto_usuario{
-
-    position: fixed;
-    font-weight: bold;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    top: 220px;
-    left: 1280px;
-
-}
-
-#botao_voltar{
-    position: fixed;
-    left: 970px;
-    bottom: 10px;
-    height: 50px;
-    width: 200px;
-    padding: 8px;
-    color: #ffffff;
-    background-color: #192a6b;
-    text-decoration: none;
-    display: flex;            /* Ativa o modo Flexbox */
-    justify-content: center;  /* Centraliza o texto na horizontal (esquerda/direita) */
-    align-items: center;
-}    
-
-#navbar_adicionar{ 
-    text-decoration: none;
-    display: flex;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    font-size: 20px;
-    position: absolute;
-    background-color: #192a6b;
-    color: white;
-    padding: 20px;
-    z-index: 1050;
-}
-
-#titulo_INICIAL{
-
-    position: fixed;
-    font-weight: bold;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    top: 220px;
-    left: 730px;
-    color: #FFFAFA;
-
-}
-
-#tipo{
-
-    position: absolute;
-    top: 600px;
-    left: 1400px;
-    width: 200px;
-    height: 50px;
-    padding: 12px;
-    border-radius: 8px;
-    border-color: black;
-    border: 2px solid black;
-}
-
+/* ===== BEM VINDO ===== */
 #bem_vindo{
     position: fixed;
     top: 100px;
@@ -425,89 +392,53 @@
 }
 
 #bem_vindo2{
-
     position: fixed;
     top: 100px;
     left: 50px;
     font-family: 'Montserrat', sans-serif;
-    color: #FFFAFA;   
+    color: #FFFAFA;
 }
 
+/* ===== RELATORIO / HISTORICO ===== */
 #relatorio{
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;  
+    min-height: 100vh;
 }
 
-.historico_tabela{ 
+.historico_tabela{
     width: 90%;
     max-width: 1000px;
     background: #192a6b;
     padding: 20px;
-    color: #000;  
+    color: #000;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     border-radius: 8px;
-    margin: auto; 
+    margin: auto;
 }
 
 .badge{
     color: #000;
 }
 
-#table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-#table thead th {
-    background-color: #192a6b;
-    color: #ffffff;
-    padding: 12px;
-    text-align: center;
-    border-bottom: 2px solid #2a3b7c;
-}
-
-#table tbody td {
-    padding: 12px;
-    color: #000;
-    text-align: center;              /* NOVO */
-    vertical-align: middle;          /* NOVO */
-    overflow-wrap: anywhere;  
-    border-bottom: 2px solid #2a3b7c; 
-}
-
 #texto_relatorio{
-    text-align: center; 
+    text-align: center;
     color: #ddd;
 }
 
 .tabela-scroll {
     max-height: 65vh;
     overflow-y: auto;
-}
+}   
 
-#table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #1c2b6b;  
-}
-
-
-/* 1. Cria o efeito: a página começa invisível e aparece suavemente */
+/* ===== FADE DE ENTRADA ===== */
 @keyframes fadeEntrada {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
-/* 2. Aplica esse efeito diretamente na tag body de todas as páginas */
 body {
     animation: fadeEntrada 0.5s ease-in-out forwards;
 }
