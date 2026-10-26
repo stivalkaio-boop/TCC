@@ -1,0 +1,2 @@
+import './setupReactNativeEnvironment';
+import '../../types';

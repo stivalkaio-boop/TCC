@@ -1,0 +1,1 @@
+{"version":3,"sources":["environmentHelper.ts"],"sourcesContent":[null],"names":["useEnvironmentVariablesPolyfill","devServerUrl","globalThis","process","env","EXPO_DEV_SERVER_ORIGIN"],"mappings":"AAAA,OAAO,SAASA,gCAAgC,EAAEC,YAAY,EAA6B;IACzFC,WAAWC,OAAO,GAAGD,WAAWC,OAAO,IAAI,CAAC;IAC5CD,WAAWC,OAAO,CAACC,GAAG,CAACC,sBAAsB,KAAKJ;AACpD"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["async-require/index.ts"],"sourcesContent":[null],"names":["buildAsyncRequire","globalThis","__METRO_GLOBAL_PREFIX__"],"mappings":"AAAA;;;;;CAKC,GACD,SAASA,iBAAiB,QAAQ,sBAAsB;AAExD,sFAAsF;AACtFC,UAAU,CAAC,GAAGA,WAAWC,uBAAuB,IAAI,GAAG,iBAAiB,CAAC,CAAC,GAAGF"}

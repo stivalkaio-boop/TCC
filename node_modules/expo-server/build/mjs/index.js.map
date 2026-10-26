@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.ts"],"sourcesContent":[null],"names":["createStaticLoader","createServerLoader"],"mappings":"AAAA,cAAc,gBAAgB;AAC9B,SAASA,kBAAkB,EAAEC,kBAAkB,QAAQ,oBAAoB"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles.ts"],"sourcesContent":[null],"names":["StyleSheet","webviewStyles","create","container","flex","overflow","webView","backgroundColor"],"mappings":"AAAA,SAASA,UAAU,QAAQ,eAAe;AAE1C,OAAO,MAAMC,gBAAgBD,WAAWE,MAAM,CAAC;IAC7CC,WAAW;QACTC,MAAM;QACNC,UAAU;IACZ;IACAC,SAAS;QACPC,iBAAiB;IACnB;AACF,GAAG"}

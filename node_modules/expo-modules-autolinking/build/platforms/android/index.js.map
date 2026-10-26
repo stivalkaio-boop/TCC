@@ -1,0 +1,1 @@
+{"version":3,"sources":["platforms/android/index.ts"],"sourcesContent":[null],"names":["getConfiguration","resolveExtraBuildDependenciesAsync","resolveModuleAsync"],"mappings":";;;;;;;;;;;;;;;;QACEA;eAAAA,yBAAgB;;QAEhBC;eAAAA,2CAAkC;;QADlCC;eAAAA,2BAAkB;;;yBAEb"}

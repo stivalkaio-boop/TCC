@@ -1,0 +1,22 @@
+import type { MarshalledProps } from '../dom/dom-entry';
+declare global {
+    interface Window {
+        $$EXPO_INITIAL_PROPS?: MarshalledProps;
+    }
+}
+type LogLevel = 'trace' | 'info' | 'warn' | 'error' | 'log' | 'group' | 'groupCollapsed' | 'groupEnd' | 'debug';
+/**
+ * HMR Client that receives from the server HMR updates and propagates them
+ * to runtime to reflect those changes.
+ */
+declare const HMRClient: {
+    enable(): void;
+    disable(): void;
+    registerBundle(requestUrl: string): void;
+    log(level: LogLevel, data: any[]): void;
+    setup(platformOrOptions: string | {
+        isEnabled: boolean;
+    }, bundleEntry?: string, host?: string, port?: number | string, isEnabledOrUndefined?: boolean, scheme?: string): void;
+    _onMetroError(error: unknown): void;
+};
+export default HMRClient;

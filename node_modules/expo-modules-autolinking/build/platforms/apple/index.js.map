@@ -1,0 +1,1 @@
+{"version":3,"sources":["platforms/apple/index.ts"],"sourcesContent":[null],"names":["generateModulesProviderAsync","getConfiguration","resolveExtraBuildDependenciesAsync","resolveModuleAsync","scanNativeModulesAsync"],"mappings":";;;;;;;;;;;;;;;;;;QAEEA;eAAAA,mCAA4B;;QAD5BC;eAAAA,uBAAgB;;QAGhBC;eAAAA,yCAAkC;;QADlCC;eAAAA,yBAAkB;;QAElBC;eAAAA,6BAAsB;;;uBACjB"}

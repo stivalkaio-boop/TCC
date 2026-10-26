@@ -1,0 +1,1 @@
+{"version":3,"sources":["lib/isWatcherExcluded.ts"],"sourcesContent":[null],"names":["isWatcherExcluded","EXCLUDED_DIR_SEGMENT","filePath","test"],"mappings":";;;;+BAEA;;;eAAwBA;;;AAFxB,MAAMC,uBAAuB;AAEd,SAASD,kBAAkBE,QAAgB;IACxD,OAAOD,qBAAqBE,IAAI,CAACD;AACnC"}

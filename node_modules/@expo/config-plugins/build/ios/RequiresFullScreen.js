@@ -1,0 +1,81 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+0 && (module.exports = {
+    setRequiresFullScreen: null,
+    withRequiresFullScreen: null
+});
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: Object.getOwnPropertyDescriptor(all, name).get
+    });
+}
+_export(exports, {
+    get setRequiresFullScreen () {
+        return setRequiresFullScreen;
+    },
+    get withRequiresFullScreen () {
+        return withRequiresFullScreen;
+    }
+});
+const _iosplugins = require("../plugins/ios-plugins");
+const _warnings = require("../utils/warnings");
+const withRequiresFullScreen = (0, _iosplugins.createInfoPlistPlugin)(setRequiresFullScreen, 'withRequiresFullScreen');
+const iPadInterfaceKey = 'UISupportedInterfaceOrientations~ipad';
+const requiredIPadInterface = [
+    'UIInterfaceOrientationPortrait',
+    'UIInterfaceOrientationPortraitUpsideDown',
+    'UIInterfaceOrientationLandscapeLeft',
+    'UIInterfaceOrientationLandscapeRight'
+];
+function isStringArray(value) {
+    return Array.isArray(value) && value.every((value)=>typeof value === 'string');
+}
+function hasMinimumOrientations(masks) {
+    return requiredIPadInterface.every((mask)=>masks.includes(mask));
+}
+/**
+ * Require full screen being disabled requires all ipad interfaces to be added,
+ * otherwise submissions to the iOS App Store will fail.
+ *
+ * ERROR ITMS-90474: "Invalid Bundle. iPad Multitasking support requires these orientations: 'UIInterfaceOrientationPortrait,UIInterfaceOrientationPortraitUpsideDown,UIInterfaceOrientationLandscapeLeft,UIInterfaceOrientationLandscapeRight'. Found 'UIInterfaceOrientationPortrait,UIInterfaceOrientationPortraitUpsideDown' in bundle 'com.bacon.app'."
+ *
+ * As of iOS 27, `UIRequiresFullScreen` no longer opts an app out of resizing. It requests discrete
+ * resizing that honors the supported interface orientations, it applies to iPhone as well as iPad,
+ * and Apple has deprecated it.
+ *
+ * @param interfaceOrientations
+ * @returns
+ */ function resolveExistingIpadInterfaceOrientations(interfaceOrientations) {
+    if (// Ensure type.
+    isStringArray(interfaceOrientations) && // Don't warn if it's an empty array, this is invalid regardless.
+    interfaceOrientations.length && // Check if the minimum requirements are met.
+    !hasMinimumOrientations(interfaceOrientations)) {
+        const existingList = interfaceOrientations.join(', ');
+        (0, _warnings.addWarningIOS)('ios.requireFullScreen', `iPad multitasking requires all \`${iPadInterfaceKey}\` orientations to be defined in the Info.plist, and the values currently defined are incompatible with it, so they will be overwritten to prevent a submission failure. Existing: ${existingList}. Note that as of iOS 27 supported orientations are a preference that resizable windows ignore, so define these for App Store validation rather than as a way to control layout.`);
+        return interfaceOrientations;
+    }
+    return [];
+}
+function setRequiresFullScreen(config, infoPlist) {
+    const requiresFullScreen = !!config.ios?.requireFullScreen;
+    const isTabletEnabled = config.ios?.supportsTablet || config.ios?.isTabletOnly;
+    if (isTabletEnabled && !requiresFullScreen) {
+        const existing = resolveExistingIpadInterfaceOrientations(infoPlist[iPadInterfaceKey]);
+        // There currently exists no mechanism to safely undo this feature besides `npx expo prebuild --clear`,
+        // this seems ok though because anyone using `UISupportedInterfaceOrientations~ipad` probably
+        // wants them to be defined to this value anyways. This is also the default value used in the Xcode iOS template.
+        // Merge any previous interfaces with the required interfaces.
+        infoPlist[iPadInterfaceKey] = [
+            ...new Set(existing.concat(requiredIPadInterface))
+        ];
+    }
+    return {
+        ...infoPlist,
+        UIRequiresFullScreen: requiresFullScreen
+    };
+}
+
+//# sourceMappingURL=RequiresFullScreen.js.map

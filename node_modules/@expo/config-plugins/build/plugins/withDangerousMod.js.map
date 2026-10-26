@@ -1,0 +1,1 @@
+{"version":3,"sources":["plugins/withDangerousMod.ts"],"sourcesContent":[null],"names":["withDangerousMod","config","platform","action","withMod","mod"],"mappings":";;;;+BAWaA;;;eAAAA;;;yBAVW;AAUjB,MAAMA,mBAA8D,CACzEC,QACA,CAACC,UAAUC,OAAO;IAElB,OAAOC,IAAAA,gBAAO,EAACH,QAAQ;QACrBC;QACAG,KAAK;QACLF;IACF;AACF"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.ts"],"sourcesContent":[null],"names":["parseBabelCodeFrameError","parseBabelTransformError","parseMetroError","parseWebBuildErrors","withoutANSIColorStyles"],"mappings":"AAAA,sGAAsG;AACtG,8DAA8D;;;;;;;;;;;;;;;;;;;QAI5DA;eAAAA,gDAAwB;;QACxBC;eAAAA,gDAAwB;;QACxBC;eAAAA,uCAAe;;QAJRC;eAAAA,wCAAmB;;QAOnBC;eAAAA,yCAAsB;;;qCAPK;wCAM7B;mCACgC"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["environment/DevLoadingViewNativeModule.ts"],"sourcesContent":[null],"names":["Object","freeze","name","startObserving","stopObserving","addListener","removeListeners"],"mappings":"AAAA,eAAeA,OAAOC,MAAM,CAAC;IAC3BC,MAAM;IACNC,mBAAkB;IAClBC,kBAAiB;IACjBC,gBAAe;IACfC,oBAAmB;AACrB,GAAG"}

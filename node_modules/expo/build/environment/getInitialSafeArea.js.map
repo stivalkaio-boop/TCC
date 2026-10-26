@@ -1,0 +1,1 @@
+{"version":3,"sources":["environment/getInitialSafeArea.ts"],"sourcesContent":[null],"names":["getInitialSafeArea","top","bottom","left","right"],"mappings":"AAAA,OAAO,SAASA;IACd,OAAO;QACLC,KAAK;QACLC,QAAQ;QACRC,MAAM;QACNC,OAAO;IACT;AACF"}

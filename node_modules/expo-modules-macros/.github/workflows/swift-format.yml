@@ -1,0 +1,76 @@
+name: Swift Format
+
+# Checks that the Swift sources are formatted with the pinned swift-format version.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  # Keep in sync with the version in the Development section of README.md.
+  SWIFT_FORMAT_VERSION: '604.0.0'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    # The same image as the Linux workflow. swift-format links the Swift runtime from it.
+    container: swift:6.4.0-rhel-ubi9@sha256:802a003f1eacbca9c20664a8ba79621d13f4538c3d329e745b7f8d53c70604a3
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Restore swift-format
+        id: swift-format-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin/swift-format
+          # The binary links the Swift runtime of the container image, so the key changes with this
+          # file, which sets the image.
+          key: swift-format-${{ runner.os }}-${{ env.SWIFT_FORMAT_VERSION }}-${{ hashFiles('.github/workflows/swift-format.yml') }}
+
+      - name: Build swift-format
+        if: steps.swift-format-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          src="$(mktemp -d)"
+          git clone --depth 1 --branch "$SWIFT_FORMAT_VERSION" https://github.com/swiftlang/swift-format.git "$src"
+          cd "$src"
+          swift build -c release --product swift-format
+          mkdir -p ~/.local/bin
+          cp "$(swift build -c release --show-bin-path)/swift-format" ~/.local/bin/swift-format
+
+      - name: Save swift-format
+        # Saves the binary before the lint, so that a run with findings doesn't build it again.
+        if: steps.swift-format-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin/swift-format
+          key: ${{ steps.swift-format-cache.outputs.cache-primary-key }}
+
+      - name: Add swift-format to PATH
+        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Lint
+        run: |
+          # The script lists the files with `git ls-files`. The checkout belongs to another user than
+          # the container's root user, so Git needs it marked as safe.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          npm run swift:lint

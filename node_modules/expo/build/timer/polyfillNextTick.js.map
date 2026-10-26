@@ -1,0 +1,1 @@
+{"version":3,"sources":["timer/polyfillNextTick.ts"],"sourcesContent":[null],"names":["process","nextTick","callback","args","setTimeout"],"mappings":"AAAA;;;CAGC,GAED,IAAI,CAACA,QAAQC,QAAQ,EAAE;IACrBD,QAAQC,QAAQ,GAAG,CAACC,UAAmC,GAAGC;QACxDC,WAAW,IAAMF,YAAYC,OAAO;IACtC;AACF"}

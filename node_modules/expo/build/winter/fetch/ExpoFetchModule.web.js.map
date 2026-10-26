@@ -1,0 +1,1 @@
+{"version":3,"sources":["winter/fetch/ExpoFetchModule.web.ts"],"sourcesContent":[null],"names":["StubNativeRequest","StubNativeResponse","ExpoFetchModule","NativeRequest","NativeResponse"],"mappings":"AAAA,MAAMA;AAAmB;AACzB,MAAMC;AAAoB;AAE1B,OAAO,MAAMC,kBAAkB;IAC7BC,eAAeH;IACfI,gBAAgBH;AAClB,EAAE"}

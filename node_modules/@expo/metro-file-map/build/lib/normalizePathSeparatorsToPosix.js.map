@@ -1,0 +1,1 @@
+{"version":3,"sources":["lib/normalizePathSeparatorsToPosix.ts"],"sourcesContent":[null],"names":["normalizePathSeparatorsToPosix","path","sep","filePath","replace"],"mappings":"AAAA;;;;;CAKC;;;;+BAWD;;;eAAA;;;;gEATiB;;;;;;;;;;;AAEjB,IAAIA;AACJ,IAAIC,eAAI,CAACC,GAAG,KAAK,KAAK;IACpBF,iCAAiC,CAACG,WAA6BA;AACjE,OAAO;IACLH,iCAAiC,CAACG,WAA6BA,SAASC,OAAO,CAAC,OAAO;AACzF;MAEA,WAAeJ"}

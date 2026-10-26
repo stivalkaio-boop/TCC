@@ -1,0 +1,31 @@
+import { useCallback, useEffect, useImperativeHandle } from 'react';
+import { REGISTER_DOM_IMPERATIVE_HANDLE_PROPS } from './injection';
+import { getWebViewBridge, hasWebViewBridge } from './webview-bridge';
+/**
+ * A React `useImperativeHandle` like hook for DOM components.
+ *
+ */ export function useDOMImperativeHandle(ref, init, deps) {
+    const isTargetWeb = !hasWebViewBridge() && typeof window.$$EXPO_INITIAL_PROPS === 'undefined';
+    // This generic hook forwards the caller-provided dependency list, which cannot be an array literal.
+    // oxlint-disable-next-line react/use-memo
+    const stubHandlerFactory = useCallback(()=>({}), deps ?? []);
+    // This standard useImperativeHandle hook is serving for web
+    useImperativeHandle(ref, isTargetWeb ? init : stubHandlerFactory, deps);
+    // This `globalThis._domRefProxy` is serving for native
+    useEffect(()=>{
+        if (!isTargetWeb) {
+            globalThis._domRefProxy = init();
+            getWebViewBridge().postMessage(JSON.stringify({
+                type: REGISTER_DOM_IMPERATIVE_HANDLE_PROPS,
+                data: Object.keys(globalThis._domRefProxy)
+            }));
+        }
+        return ()=>{
+            if (!isTargetWeb) {
+                globalThis._domRefProxy = undefined;
+            }
+        };
+    }, deps);
+}
+
+//# sourceMappingURL=dom-hooks.js.map

@@ -1,0 +1,1 @@
+{"version":3,"sources":["winter/ImportMetaRegistry.ts"],"sourcesContent":[null],"names":["getBundleUrl","ImportMetaRegistry","url"],"mappings":"AAAA,8DAA8D;AAE9D,SAASA,YAAY,QAAQ,wBAAwB;AAErD;;;;CAIC,GACD,OAAO,MAAMC,qBAAqB;IAChC,IAAIC,OAAM;QACR,OAAOF;IACT;AACF,EAAE"}
