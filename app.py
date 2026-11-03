@@ -5,7 +5,8 @@ import base64
 import os
 import uuid
 from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash, check_password_hash
+import bcrypt
+from werkzeug.security import check_password_hash as checar_hash_antigo
  
 app = Flask(__name__)
 app.secret_key = 'TCC_2026'
@@ -17,7 +18,7 @@ def obter_conexao():
         password=os.environ.get('DB_PASSWORD', ''),
         port=int(os.environ.get('DB_PORT', 3306)),
         database=os.environ.get('DB_NAME', 'almoxarifado'),
-        charset='utf8mb4'   # necessário para gravar "Saída" com acento
+        charset='utf8mb4'
     )
 
 def login_obrigatorio(func):
@@ -38,18 +39,53 @@ def admin_obrigatorio(func):
         return func(*args, **kwargs)
     return wrapper
  
-# ---------------------------------------------------------------
-# Confere usuário e senha (a senha no banco é um hash).
-# O cursor precisa ser dictionary=True.
-# ---------------------------------------------------------------
+# Hash de senha com bcrypt.
+
+def gerar_hash(senha):
+    senha_bytes = (senha or '').encode('utf-8')[:72]
+    return bcrypt.hashpw(senha_bytes, bcrypt.gensalt()).decode('utf-8')
+
+
+def conferir_hash(senha, hash_salvo):
+    senha_bytes = (senha or '').encode('utf-8')[:72]
+    try:
+        return bcrypt.checkpw(senha_bytes, hash_salvo.encode('utf-8'))
+    except ValueError:  # hash salvo em formato inválido
+        return False
+
+
+def eh_hash_bcrypt(texto):
+    return texto.startswith(('$2a$', '$2b$', '$2y$'))
+
+
+def eh_hash_antigo(texto):
+    return texto.startswith(('scrypt:', 'pbkdf2:'))
+
+
+# Se o usuário ainda tiver hash antigo, confere do jeito
+# antigo e já troca para bcrypt.
+
 def verificar_login(cursor, nome, senha):
     cursor.execute(
         "SELECT id, nome, senha, tipo FROM usuarios WHERE nome = %s",
         (nome,)
     )
     usuario = cursor.fetchone()
-    if usuario and check_password_hash(usuario['senha'], senha or ''):
+    if not usuario:
+        return None
+
+    hash_salvo = usuario['senha']
+
+    if eh_hash_bcrypt(hash_salvo):
+        return usuario if conferir_hash(senha, hash_salvo) else None
+
+    if eh_hash_antigo(hash_salvo) and checar_hash_antigo(hash_salvo, senha or ''):
+        cursor.execute(
+            "UPDATE usuarios SET senha = %s WHERE id = %s",
+            (gerar_hash(senha), usuario['id'])
+        )
         return usuario
+
     return None
 
 
@@ -258,7 +294,7 @@ def usuarios():
  
             cursor.execute(
                 "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
-                (nome, generate_password_hash(senha), tipo)
+                (nome, gerar_hash(senha), tipo)
             )
             registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
             conexao_bd.commit()
@@ -268,6 +304,8 @@ def usuarios():
         except mysql.connector.Error as erro:
             if conexao_bd:
                 conexao_bd.rollback()
+            if erro.errno == 1062:  # nome repetido (coluna UNIQUE)
+                return "Já existe um usuário com esse nome."
             return f"Erro ao cadastrar o usuário: {erro}"
         finally:
             if cursor:
@@ -289,7 +327,7 @@ def historico():
         "SELECT id, produto_nome, tipo_movimentacao, quantidade, usuario, "
         "DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS data_formatada "
         "FROM historico "
-        "ORDER BY data_movimentacao ASC, id ASC "
+        "ORDER BY data_movimentacao ASC, id ASC"
         "LIMIT 500"
     )
     movimentacoes = cursor.fetchall()
@@ -315,7 +353,7 @@ def conexao():
 # Protege todas as rotas/api/(menos o login)/api/usuarios é só para admin.
 @app.before_request
 def proteger_api():
-    if not request.path.startswith('/api/') or request.path == '/api/login':
+    if not request.path.startswith('/api/') or request.path in ('/api/login', '/api/logout'):
         return None
     if 'usuario_id' not in session:
         return jsonify(erro='Não autenticado'), 401
@@ -339,16 +377,30 @@ def api_login():
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
     usuario = verificar_login(cursor, dados.get('nome'), dados.get('senha'))
+
+    if usuario:
+        session['usuario_id'] = usuario['id']
+        session['usuario_nome'] = usuario['nome']
+        session['usuario_tipo'] = usuario['tipo']
+        # Registra o login no relatório (igual ao login pelo site)
+        registrar_historico(cursor, '-', 'Login', 0)
+
+    con.commit()
     cursor.close()
     con.close()
 
     if not usuario:
         return jsonify(erro='Usuário ou senha incorretos'), 401
 
-    session['usuario_id'] = usuario['id']
-    session['usuario_nome'] = usuario['nome']
-    session['usuario_tipo'] = usuario['tipo']
+
     return jsonify(id=usuario['id'], nome=usuario['nome'], tipo=usuario['tipo'])
+
+
+# POST /api/logout   (encerra a sessão no servidor)
+@app.route('/api/logout', methods=['POST'])
+def api_logout():
+    session.clear()
+    return jsonify(ok=True)
 
 
 # GET /api/itens            (opcional: ?q=texto para buscar por nome ou categoria)
@@ -465,7 +517,7 @@ def api_movimentar():
     cursor = con.cursor()
     cursor.execute(query, item)
 
-    # Nenhuma linha alterada = item não existe ou estoque insuficiente
+
     if cursor.rowcount == 0:
         cursor.close()
         con.close()
@@ -489,7 +541,7 @@ def api_historico():
 
     query = ("SELECT id, produto_nome, tipo_movimentacao, quantidade, usuario, "
              "DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS data_formatada "
-             "FROM historico ORDER BY data_movimentacao ASC, id ASC "
+             "FROM historico ORDER BY data_movimentacao DESC, id DESC "
              f"LIMIT {limite}")
 
     con = obter_conexao()
@@ -528,15 +580,22 @@ def api_criar_usuario():
 
     con = obter_conexao()
     cursor = con.cursor()
-    cursor.execute(
-        "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
-        (nome, generate_password_hash(senha), tipo)
-    )
-    registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
-    con.commit()
-    novo_id = cursor.lastrowid
-    cursor.close()
-    con.close()
+    try:
+        cursor.execute(
+            "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
+            (nome, gerar_hash(senha), tipo)
+        )
+        registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
+        con.commit()
+        novo_id = cursor.lastrowid
+    except mysql.connector.IntegrityError as erro:
+        con.rollback()
+        if erro.errno == 1062:  
+            return jsonify(erro='Já existe um usuário com esse nome'), 409
+        raise
+    finally:
+        cursor.close()
+        con.close()
 
     return jsonify(id=novo_id), 201
 
@@ -547,7 +606,7 @@ def garantir_admin(nome='admin', senha_padrao='1234'):
     con = obter_conexao()
     cursor = con.cursor(dictionary=True)
     try:
-        # Garante que a coluna cabe o hash (~160 caracteres)
+
         cursor.execute("ALTER TABLE usuarios MODIFY senha VARCHAR(255) NOT NULL")
 
         cursor.execute("SELECT id, senha FROM usuarios WHERE nome = %s", (nome,))
@@ -556,14 +615,14 @@ def garantir_admin(nome='admin', senha_padrao='1234'):
         if not admin:
             cursor.execute(
                 "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, 'admin')",
-                (nome, generate_password_hash(senha_padrao))
+                (nome, gerar_hash(senha_padrao))
             )
             print(f'[setup] Usuário "{nome}" criado.')
-        elif not admin['senha'].startswith(('scrypt:', 'pbkdf2:')):
+        elif not (eh_hash_bcrypt(admin['senha']) or eh_hash_antigo(admin['senha'])):
             # Senha antiga em texto puro (ou hash cortado): refaz o hash
             cursor.execute(
                 "UPDATE usuarios SET senha = %s, tipo = 'admin' WHERE id = %s",
-                (generate_password_hash(senha_padrao), admin['id'])
+                (gerar_hash(senha_padrao), admin['id'])
             )
             print(f'[setup] Senha do "{nome}" convertida para hash.')
 
