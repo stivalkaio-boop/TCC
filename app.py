@@ -314,27 +314,27 @@ def usuarios():
                 conexao_bd.close()
  
     return render_template('usuarios.html')
- 
- 
+
+
 # 9. Página do histórico (relatório)
 @app.route('/historico')
 @login_obrigatorio
 def historico():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True)
- 
+
     cursor.execute(
         "SELECT id, produto_nome, tipo_movimentacao, quantidade, usuario, "
         "DATE_FORMAT(data_movimentacao, '%d/%m/%Y %H:%i:%s') AS data_formatada "
         "FROM historico "
-        "ORDER BY data_movimentacao ASC, id ASC"
+        "ORDER BY data_movimentacao DESC, id DESC "
         "LIMIT 500"
     )
     movimentacoes = cursor.fetchall()
- 
+
     cursor.close()
     conexao_bd.close()
- 
+
     return render_template('historico.html', movimentacoes=movimentacoes)
  
  
