@@ -7,7 +7,7 @@ import uuid
 from werkzeug.utils import secure_filename
 import bcrypt
 from werkzeug.security import check_password_hash as checar_hash_antigo
- 
+
 app = Flask(__name__)
 app.secret_key = 'TCC_2026'
 
@@ -38,7 +38,7 @@ def admin_obrigatorio(func):
             return redirect(url_for('painel_usuario'))
         return func(*args, **kwargs)
     return wrapper
- 
+
 # Hash de senha com bcrypt.
 
 def gerar_hash(senha):
@@ -99,33 +99,33 @@ def registrar_historico(cursor, produto_nome, tipo, quantidade=0):
         "VALUES (%s, %s, %s, %s)",
         (produto_nome, tipo, quantidade, usuario)
     )
- 
- 
+
+
 # 1. Página de login
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         usuario = request.form.get('username')
         senha = request.form.get('password')
- 
+
         conexao_bd = cursor = None
         try:
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor(dictionary=True)
- 
+
             usuario_encontrado = verificar_login(cursor, usuario, senha)
- 
+
             if not usuario_encontrado:
                 return "Usuário ou senha incorretos!"
- 
+
             session['usuario_id'] = usuario_encontrado['id']
             session['usuario_nome'] = usuario_encontrado['nome']
             session['usuario_tipo'] = usuario_encontrado['tipo']
- 
+
             # Registra o login no relatório
             registrar_historico(cursor, '-', 'Login', 0)
             conexao_bd.commit()
- 
+
         except mysql.connector.Error as erro:
             return f"Erro ao fazer login: {erro}"
         finally:
@@ -133,40 +133,40 @@ def login():
                 cursor.close()
             if conexao_bd:
                 conexao_bd.close()
- 
+
         if session['usuario_tipo'] == 'admin':
             return redirect(url_for('painel'))
         return redirect(url_for('painel_usuario'))
- 
+
     return render_template('index.html')
- 
- 
+
+
 # 2. Página Inicial do Usuário
 @app.route('/Inicial_usuario')
 @login_obrigatorio
 def painel_usuario():
     return render_template('inicial_usuario.html')
- 
- 
+
+
 # 3. Página Inicial (admin)
 @app.route('/INICIAL')
 @admin_obrigatorio
 def painel():
     conexao_bd = obter_conexao()
     cursor = conexao_bd.cursor(dictionary=True)
- 
+
     cursor.execute("SELECT id, nome, tipo FROM usuarios WHERE id = %s;", (session['usuario_id'],))
     usuario_logado = cursor.fetchone()
- 
+
     cursor.execute("SELECT id, nome, tipo FROM usuarios;")
     resultado = cursor.fetchall()
- 
+
     cursor.close()
     conexao_bd.close()
- 
+
     return render_template('INICIAL.html', resultado=resultado, usuario=usuario_logado)
- 
- 
+
+
 # 4. Página de itens
 @app.route('/itens')
 @login_obrigatorio
@@ -175,13 +175,13 @@ def itens():
     cursor = conexao_bd.cursor()
     cursor.execute("SELECT * FROM itens;")
     resultado = cursor.fetchall()
- 
+
     cursor.close()
     conexao_bd.close()
- 
+
     return render_template('itens.html', resultado=resultado)
- 
- 
+
+
 # 5. Página de adicionar
 @app.route('/adicionar', methods=['GET', 'POST'])
 @login_obrigatorio
@@ -194,12 +194,12 @@ def adicionar():
         foto = request.form.get('foto') or ''
         if foto:
             foto = 'static/' + foto
- 
+
         conexao_bd = cursor = None
         try:
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor()
- 
+
             cursor.execute(
                 "INSERT INTO itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
                 "VALUES (%s, %s, %s, %s, %s)",
@@ -207,9 +207,9 @@ def adicionar():
             )
             registrar_historico(cursor, nome, 'Cadastro', quantidade)
             conexao_bd.commit()
- 
+
             return redirect(url_for('itens'))
- 
+
         except mysql.connector.Error as erro:
             if conexao_bd:
                 conexao_bd.rollback()
@@ -219,10 +219,10 @@ def adicionar():
                 cursor.close()
             if conexao_bd:
                 conexao_bd.close()
- 
+
     return render_template('adicionar.html')
- 
- 
+
+
 # 6. Página de retirar / movimentar
 @app.route('/retirar', methods=['GET', 'POST'])
 @login_obrigatorio
@@ -231,10 +231,10 @@ def retirar():
         operacao = request.form.get('operacao')
         nome = request.form.get('nome')
         quantidade = request.form.get('quantidade', type=int)
- 
+
         if not nome or not quantidade or quantidade <= 0:
             return "Informe o nome do item e uma quantidade maior que zero."
- 
+
         if operacao == 'Saida':
             tipo = 'Saída'
             comando = ("UPDATE itens SET quantidade_estoque = quantidade_estoque - %s "
@@ -247,24 +247,24 @@ def retirar():
             valores = (quantidade, nome)
         else:
             return "Operação inválida!"
- 
+
         conexao_bd = cursor = None
         try:
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor()
- 
+
             cursor.execute(comando, valores)
- 
+
             # Nenhuma linha alterada = item não existe ou estoque insuficiente
             if cursor.rowcount == 0:
                 conexao_bd.rollback()
                 return "Item não encontrado ou estoque insuficiente."
- 
+
             registrar_historico(cursor, nome, tipo, quantidade)
             conexao_bd.commit()
- 
+
             return redirect(url_for('itens'))
- 
+
         except mysql.connector.Error as erro:
             if conexao_bd:
                 conexao_bd.rollback()
@@ -274,10 +274,10 @@ def retirar():
                 cursor.close()
             if conexao_bd:
                 conexao_bd.close()
- 
+
     return render_template('retirar.html')
- 
- 
+
+
 # 7. Página de Usuários (somente admin)
 @app.route('/usuarios', methods=['GET', 'POST'])
 @admin_obrigatorio
@@ -286,21 +286,21 @@ def usuarios():
         nome = request.form.get('nome_usuario')
         senha = request.form.get('senha_usuario')
         tipo = request.form.get('tipo_user_admin', 'user')
- 
+
         conexao_bd = cursor = None
         try:
             conexao_bd = obter_conexao()
             cursor = conexao_bd.cursor()
- 
+
             cursor.execute(
                 "INSERT INTO usuarios (nome, senha, tipo) VALUES (%s, %s, %s)",
                 (nome, gerar_hash(senha), tipo)
             )
             registrar_historico(cursor, f'Novo usuário: {nome}', 'Cadastro de usuário', 0)
             conexao_bd.commit()
- 
+
             return redirect(url_for('usuarios'))
- 
+
         except mysql.connector.Error as erro:
             if conexao_bd:
                 conexao_bd.rollback()
@@ -312,7 +312,7 @@ def usuarios():
                 cursor.close()
             if conexao_bd:
                 conexao_bd.close()
- 
+
     return render_template('usuarios.html')
 
 
@@ -336,8 +336,8 @@ def historico():
     conexao_bd.close()
 
     return render_template('historico.html', movimentacoes=movimentacoes)
- 
- 
+
+
 # 10. Página de conexão
 @app.route('/conexao')
 def conexao():
@@ -349,7 +349,7 @@ def conexao():
         return f"Erro ao conectar ao banco de dados: {erro}"
 
 
- # 11. APIs (JSON) para o app React Native
+# 11. APIs (JSON) para o app React Native
 # Protege todas as rotas/api/(menos o login)/api/usuarios é só para admin.
 @app.before_request
 def proteger_api():
@@ -391,7 +391,6 @@ def api_login():
 
     if not usuario:
         return jsonify(erro='Usuário ou senha incorretos'), 401
-
 
     return jsonify(id=usuario['id'], nome=usuario['nome'], tipo=usuario['tipo'])
 
@@ -436,7 +435,7 @@ def api_buscar_item(item_id):
     return jsonify(item)
 
 
-# POST /api/itens 
+# POST /api/itens
 @app.route('/api/itens', methods=['POST'])
 def api_criar_item():
     dados = request.get_json(silent=True) or request.form
@@ -468,8 +467,6 @@ def api_criar_item():
         with open(os.path.join(app.static_folder, nome_arquivo), 'wb') as arquivo:
             arquivo.write(conteudo)
         foto = 'static/' + nome_arquivo
-
-    print('DEBUG foto recebida:', bool(foto_base64), '| salva como:', foto)  # pode apagar depois
 
     item = (nome, categoria, quantidade, preco, foto)
     query = ("INSERT INTO itens (nome, categoria, quantidade_estoque, preco_unitario, foto) "
@@ -516,7 +513,6 @@ def api_movimentar():
     con = obter_conexao()
     cursor = con.cursor()
     cursor.execute(query, item)
-
 
     if cursor.rowcount == 0:
         cursor.close()
@@ -590,7 +586,7 @@ def api_criar_usuario():
         novo_id = cursor.lastrowid
     except mysql.connector.IntegrityError as erro:
         con.rollback()
-        if erro.errno == 1062:  
+        if erro.errno == 1062:
             return jsonify(erro='Já existe um usuário com esse nome'), 409
         raise
     finally:

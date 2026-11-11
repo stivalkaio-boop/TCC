@@ -17,12 +17,11 @@ import Navbar from '../componentes/Navbar';
 import { API_URL } from '../config';
 
 export default function Movimentar({ navigation, route }) {
-  // "nome" aqui é o nome do USUÁRIO logado (vem do login)
+
   const { nome: usuario, tipo } = route.params;
 
   const [operacao, setOperacao] = useState('Entrada'); // 'Entrada' ou 'Saida'
   const [nomeItem, setNomeItem] = useState('');
-  const [categoria, setCategoria] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [enviando, setEnviando] = useState(false);
 
@@ -55,7 +54,6 @@ export default function Movimentar({ navigation, route }) {
 
       if (response.ok && data) {
         setNomeItem('');
-        setCategoria('');
         setQuantidade('');
 
         Alert.alert(
@@ -150,15 +148,6 @@ export default function Movimentar({ navigation, route }) {
               placeholderTextColor="#8a8a8a"
               value={nomeItem}
               onChangeText={setNomeItem}
-            />
-
-            <Text style={styles.label}>Categoria:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Categoria do item"
-              placeholderTextColor="#8a8a8a"
-              value={categoria}
-              onChangeText={setCategoria}
             />
 
             <Text style={styles.label}>Quantidade:</Text>
@@ -295,7 +284,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-  // botão voltar
+
   botaoVoltar: {
     alignSelf: 'flex-start',
     backgroundColor: '#ff9500',

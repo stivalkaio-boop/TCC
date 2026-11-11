@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -9,17 +9,12 @@ export default function Navbar({ navigation, nome, tipo }) {
   const [menuAberto, setMenuAberto] = useState(false);
   const [cadastrarAberto, setCadastrarAberto] = useState(false);
 
-  // vai para uma tela que já existe no app
+
   const irPara = (tela) => {
     setMenuAberto(false);
     navigation.navigate(tela, { nome, tipo });
   };
 
-  // telas que ainda não existem no app: troque por irPara('NomeDaTela') quando criar
-  const emBreve = (titulo) => {
-    setMenuAberto(false);
-    Alert.alert(titulo, 'Esta tela ainda será criada no app.');
-  };
 
   const sair = () => {
     setMenuAberto(false);
@@ -72,7 +67,7 @@ export default function Navbar({ navigation, nome, tipo }) {
                   <Text style={styles.textoSubMenu}>Adicionar Novo Item</Text>
                 </Pressable>
                 <Pressable style={styles.itemMenu} onPress={() => irPara('retirar')}>
-                    <Text style={styles.textoSubMenu}>Movimentar</Text>
+                  <Text style={styles.textoSubMenu}>Movimentar</Text>
                 </Pressable>
               </View>
             )}

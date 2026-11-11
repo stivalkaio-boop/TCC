@@ -433,7 +433,7 @@ html {
     overflow-y: auto;
 }   
 
-/* ===== FADE DE ENTRADA ===== */
+
 @keyframes fadeEntrada {
     from { opacity: 0; }
     to   { opacity: 1; }

@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="static/styles.css">
     <link rel="icon" type="image/icon" href="static/logosenai.ico">
 </head>
-<body>
-    <body id="fundoretirar">
+<body id="fundoretirar">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="padding: 0px;">
     <div id="navbar" class="container-fluid">
     <a class="navbar-brand" href="{{ url_for('login') }}">
@@ -38,7 +37,6 @@
     </li>
 <li>
       <a class="dropdown-item" href="/retirar">
-        <!-- Ícone no segundo item do submenu -->
         <img src="static/movimento.png" alt="Ícone Movimentar" style="height: 18px; width: 18px; margin-right: 5px; vertical-align: middle;">
         Movimentar
       </a>
@@ -78,14 +76,6 @@
             <button id="retirar" type="submit" class="btn btn-primary"> Retire seu item</button>
     </form>
     
-    <script>
-        function mostrarQuadro() {
-            document.getElementById('QUADRO').style.display = 'flex';
-        }
-        function esconderQuadro() {
-            document.getElementById('QUADRO').style.display = 'none';
-        }
-    </script>
 
 {% if session['usuario_tipo'] == 'admin' %}
     <a href="{{ url_for('painel') }}" id="botaovoltar" class="btn btn-primary">

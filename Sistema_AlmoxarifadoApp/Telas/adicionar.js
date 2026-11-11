@@ -19,7 +19,7 @@ import Navbar from '../componentes/Navbar';
 import { API_URL } from '../config';
 
 export default function Adicionar({ navigation, route }) {
-  // "nome" aqui é o nome do USUÁRIO logado (vem do login)
+
   const { nome: usuario, tipo } = route.params;
 
   const [nomeItem, setNomeItem] = useState('');
@@ -47,7 +47,7 @@ export default function Adicionar({ navigation, route }) {
       return;
     }
 
-    // JSON: campos de texto + a foto em base64 (se tiver)
+
     const dados = {
       nome: nomeItem.trim(),
       categoria: categoria.trim(),

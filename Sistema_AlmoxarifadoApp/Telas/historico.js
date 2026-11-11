@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import { API_URL } from '../config';
 import Navbar from '../componentes/Navbar';
 
-// Cor de cada tipo (equivale às classes entrada, saida, cadastro... do CSS)
+// Cor de cada tipo.
 const CORES_TIPO = {
   'Entrada':             { bg: '#d4edda', texto: '#5caa4c' },
   'Saída':               { bg: '#f8d7da', texto: '#ac2532' },
@@ -29,7 +29,7 @@ export default function Relatorio({ navigation, route }) {
   const [atualizando, setAtualizando] = useState(false);
   const [erro, setErro] = useState('');
 
-  // a Navbar já envia nome e tipo ao navegar
+
   const nome = route?.params?.nome;
   const tipo = route?.params?.tipo;
 
@@ -47,7 +47,6 @@ export default function Relatorio({ navigation, route }) {
       }
 
       const dados = await resposta.json();
-      console.log('HISTORICO:', JSON.stringify(dados)); 
 
       const lista = Array.isArray(dados)
         ? dados
@@ -91,7 +90,7 @@ export default function Relatorio({ navigation, route }) {
           {carregando ? (
             <ActivityIndicator color="#fff" style={{ marginVertical: 20 }} />
           ) : (
-            // Rolagem horizontal, igual ao "tabela-scroll" do site
+            
             <ScrollView horizontal showsHorizontalScrollIndicator>
               <View>
                 {/* Cabeçalho */}
